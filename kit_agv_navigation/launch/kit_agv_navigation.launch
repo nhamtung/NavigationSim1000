@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Arguments -->
+
+  <arg name="topic_front"         default="/sick_safetyscanners_front"/>
+  <arg name="topic_back"          default="/sick_safetyscanners_back"/>
+  <arg name="sensor_ip_front"     default="192.168.1.12"/>
+  <arg name="sensor_ip_back"      default="192.168.1.13"/>
+  <arg name="host_ip"             default="192.168.1.255"/>
+  <arg name="host_udp_port_front" default="6060" />
+  <arg name="host_udp_port_back"  default="6061" />  
+  <arg name="angle_start_front"   default="-2.2" />
+  <arg name="angle_end_front"     default="2.2" />
+  <arg name="angle_start_back"    default="-2.2" />
+  <arg name="angle_end_back"      default="2.2" />
+  <arg name="frame_id_front"      default="base_laser_front"/>
+  <arg name="frame_id_back"       default="base_laser_back"/>
+
+  <!-- <arg name="sensor_ip_front"     default="192.168.1.23" />
+  <arg name="sensor_ip_back"      default="192.168.1.22" />  
+  <arg name="host_ip"             default="192.168.1.5"/>
+  <arg name="host_udp_port_front" default="6060" />
+  <arg name="host_udp_port_back"  default="6061" />
+  <arg name="angle_start_front"   default="-1.57" />
+  <arg name="angle_end_front"     default="1.57" />
+  <arg name="angle_start_back"    default="-1.57" />
+  <arg name="angle_end_back"      default="1.57" />
+  <arg name="frame_id_front"      default="base_laser_front"/>
+  <arg name="frame_id_back"       default="base_laser_back"/> -->
+
+  <!-- MicroScan3 - sick_safetyscans -->
+  <include file="$(find sick_safetyscanners)/launch/sick_safetyscanners.launch">
+    <arg name="topic"         value="$(arg topic_front)"/>
+    <arg name="sensor_ip"     value="$(arg sensor_ip_front)"/>
+    <arg name="host_ip"       value="$(arg host_ip)"/>
+    <arg name="host_udp_port" value="$(arg host_udp_port_front)"/>
+    <arg name="frame_id"      value="$(arg frame_id_front)"/>
+    <arg name="angle_start"   value="$(arg angle_start_front)"/>
+    <arg name="angle_end"     value="$(arg angle_end_front)"/>
+  </include>
+
+  <!-- agv_v1, kit_agv -->
+  <arg name="urdf_file" default="$(find xacro)/xacro --inorder '$(find kit_agv_description)/urdf/agv_v1.urdf.xacro'" />
+  <include file="$(find kit_agv_bringup)/launch/kit_agv_remote.launch">
+     <arg name="urdf_file" value="$(arg urdf_file)" />
+  </include>
+  
+  <!-- Map server -->
+  <!-- <arg name="map_file" default="$(find kit_agv_navigation)/maps/map708_SIM.yaml"/> -->
+  <!-- <arg name="map_file" default="$(find kit_agv_navigation)/maps/map709_SIM.yaml"/> -->
+  <arg name="map_file" default="$(find kit_agv_navigation)/maps/lobbyA1.yaml"/>
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+
+  <!-- AMCL -->
+  <arg name="scan_topic"     default="/sick_safetyscanners_front/scan"/>
+  <arg name="initial_pose_x" default="0.0"/>
+  <arg name="initial_pose_y" default="0.0"/>
+  <arg name="initial_pose_a" default="0.0"/>
+  <!-- <include file="$(find kit_agv_navigation)/launch/amcl.launch">
+    <arg name="scan_topic"     value="$(arg scan_topic)"/>
+    <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
+    <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
+    <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
+  </include> -->
+
+  <!-- sick_lidar_localization -->
+  <arg name="sim1000_ip" default="192.168.1.1"/>
+  <!-- <include file="$(find sick_lidar_localization)/launch/sim_loc_driver.launch">
+    <arg name="localization_controller_ip_address" value="$(arg sim1000_ip)"/>
+  </include> -->
+
+  <!-- move_base -->
+  <arg name="move_forward_only" default="false"/>
+  <include file="$(find kit_agv_navigation)/launch/move_base.launch">
+    <arg name="move_forward_only" value="$(arg move_forward_only)"/>
+  </include>
+
+  <!-- Laser Odom -->
+  <!-- <node pkg="laser_scan_matcher" type="laser_scan_matcher_node" name="laser_scan_matcher_node" output="screen"/> -->
+  <!-- joint_state_publisher -->
+  <node pkg="joint_state_publisher" type="joint_state_publisher" respawn="false" name="joint_state_publisher" output="screen"/>
+
+  <!-- Motor Driver -->
+  <!-- <include file="$(find driver_blvd_controller)/launch/agvrun.launch">
+  </include> -->
+
+  <!-- rviz -->
+  <arg name="open_rviz" default="true"/>
+  <!-- <arg name="open_rviz" default="false"/> -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find kit_agv_navigation)/rviz/kit_agv_navigation.rviz"/>
+  </group>
+  
+</launch>

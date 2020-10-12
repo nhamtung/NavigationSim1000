@@ -1,0 +1,7 @@
+image: /home/robotics/TungNV/NavigationSim1000/catkin_ws/src/kit_agv_navigation/maps/map708_SIM.png
+#image: /home/nhamtung/TungNV/NavigationSim1000/catkin_ws/src/kit_agv_navigation/maps/map708_SIM.png
+resolution: 0.1
+origin: [-0.55, -2.25, 0.0]
+negate: 0
+occupied_thresh: 0.55
+free_thresh: 0.45

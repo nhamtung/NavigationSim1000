@@ -1,0 +1,33 @@
+<!--
+DESCRITPION
+-->
+
+<launch>
+  <arg name="frame_merger"      default="base_laser" />
+  <arg name="merged_cloud"      default="/merged_cloud" />
+  <arg name="merged_topic"      default="/sick_safetyscanners/scan_multi" />
+  <arg name="laser_topic_front" default="/sick_safetyscanners_front/scan" />
+  <arg name="laser_topic_back"  default="/sick_safetyscanners_back/scan" />
+  <arg name="laserscan_topics"  default="/sick_safetyscanners_front/scan /sick_safetyscanners_back/scan" />
+  <arg name="angle_min"         default="-2"/>
+  <arg name="angle_max"         default="2"/>
+  <arg name="angle_increment"   default="0.0058"/>
+  <arg name="scan_time"         default="0.0333333"/>
+  <arg name="range_min"         default="0.3"/>
+  <arg name="range_max"         default="50"/>
+  
+  <node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
+    <param name="destination_frame"       value="$(arg frame_merger)"/>
+    <param name="cloud_destination_topic" value="$(arg merged_cloud)"/>
+    <param name="scan_destination_topic"  value="$(arg merged_topic)"/>  <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+    <param name="laserscan_topics"        value="$(arg laserscan_topics)"/>
+    <param name="laser_topic_front"       value="$(arg laser_topic_front)"/>
+    <param name="laser_topic_back"        value="$(arg laser_topic_back)"/>
+    <param name="angle_min"               value="$(arg angle_min)"/>
+    <param name="angle_max"               value="$(arg angle_max)"/>
+    <param name="angle_increment"         value="$(arg angle_increment)"/>
+    <param name="scan_time"               value="$(arg scan_time)"/>
+    <param name="range_min"               value="$(arg range_min)"/>
+    <param name="range_max"               value="$(arg range_max)"/>
+  </node>
+</launch>
