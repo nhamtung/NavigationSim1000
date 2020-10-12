@@ -165,10 +165,10 @@ void sick_lidar_localization::MessageCheckThread::runMessageCheckThreadCb(void)
       total_message_check_cnt++;
       if (!checkTelegram(result_port_telegram))
       {
-        ROS_WARN_STREAM("## ERROR MessageCheckThread: driver message check failed (" << total_message_check_cnt << ". driver message)");
-        ROS_WARN_STREAM("## driver message (received): " << sick_lidar_localization::Utils::flattenToString(result_port_telegram));
-        ROS_WARN_STREAM("## MessageCheckThread: min allowed values in result port telegrams: " << sick_lidar_localization::Utils::flattenToString(m_result_port_telegram_min_values));
-        ROS_WARN_STREAM("## MessageCheckThread: max allowed values in result port telegrams: " << sick_lidar_localization::Utils::flattenToString(m_result_port_telegram_max_values));
+        ROS_WARN_STREAM("driver_check_thread.cpp-168-ERROR MessageCheckThread: driver message check failed (" << total_message_check_cnt << ". driver message)");
+        // ROS_WARN_STREAM("## driver message (received): " << sick_lidar_localization::Utils::flattenToString(result_port_telegram));
+        // ROS_WARN_STREAM("## MessageCheckThread: min allowed values in result port telegrams: " << sick_lidar_localization::Utils::flattenToString(m_result_port_telegram_min_values));
+        // ROS_WARN_STREAM("## MessageCheckThread: max allowed values in result port telegrams: " << sick_lidar_localization::Utils::flattenToString(m_result_port_telegram_max_values));
         total_message_check_failed_cnt++;
       }
       else

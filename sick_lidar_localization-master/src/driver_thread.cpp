@@ -350,7 +350,7 @@ void sick_lidar_localization::DriverThread::runConverterThreadCb(void)
             ROS_WARN_STREAM("driver_thread.cpp-350-## ERROR: service \"SickLocTimeSync\" failed, could not get system time from ticks");
           // Publish the decoded result port telegram (type SickLocResultPortTelegramMsg)
           m_result_telegrams_publisher.publish(result_telegram);
-          ROS_INFO_STREAM("driver_thread.cpp-353-result telegram received " << sick_lidar_localization::Utils::toHexString(binary_telegram) << ", published " << sick_lidar_localization::Utils::flattenToString(result_telegram));
+          // ROS_INFO_STREAM("driver_thread.cpp-353-result telegram received " << sick_lidar_localization::Utils::toHexString(binary_telegram) << ", published " << sick_lidar_localization::Utils::flattenToString(result_telegram));
           if( (ros::Time::now() - diagnostic_msg_published).toSec() >= 60)
           {
             publishDiagnosticMessage(NO_ERROR, "sim_loc_driver: status okay, receiving and publishing result telegrams");
