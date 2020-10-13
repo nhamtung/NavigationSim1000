@@ -48,6 +48,10 @@
 #include <iostream>
 #include <array>
 
+#include <stdint.h>
+
+#include "geometry_msgs/PoseWithCovarianceStamped.h"
+
 namespace move_base {
 
   MoveBase::MoveBase(tf2_ros::Buffer& tf) :
@@ -75,6 +79,9 @@ namespace move_base {
     //Subscribe the topic /sick_lidar_localization/driver/result_telegrams
     pose_ = n.subscribe<sick_lidar_localization::SickLocResultPortTelegramMsg>("sick_lidar_localization/driver/result_telegrams", 1, boost::bind(&MoveBase::getCurrentPose, this, _1));
     ROS_INFO("move_base.cpp-85-Subscriber topic: /sick_lidar_localization/driver/result_telegrams");
+
+    //Subscribe the topic /initialpose
+    initial_pose_sub_ = n.subscribe("initialpose", 2, &MoveBase::initialPoseReceived, this);
 
     // Publish the topic /current_pose
     current_pose_pub_ = n.advertise<geometry_msgs::PoseStamped>("current_pose", 0);
@@ -1184,6 +1191,30 @@ namespace move_base {
     as_->setAborted(move_base_msgs::MoveBaseResult(), "Aborting on the goal because the node has been killed");  
     return false;  
   }
+  
+  void MoveBase::initialPoseReceived(const geometry_msgs::PoseWithCovarianceStampedConstPtr& msg)
+  {
+    ROS_INFO("move_base.cpp-1193-initialPoseReceived()");
+    geometry_msgs::PoseWithCovarianceStamped initPose; 
+    initPose.pose = msg->pose;
+    // ROS_INFO("move_base.cpp-1200-initPose.x: %f", initPose.pose.pose.position.x);
+    // ROS_INFO("move_base.cpp-1201-initPose.y: %f", initPose.pose.pose.position.y);
+    // ROS_INFO("move_base.cpp-1202-initPose.z: %f", initPose.pose.pose.orientation.z);
+    // ROS_INFO("move_base.cpp-1203-initPose.w: %f", initPose.pose.pose.orientation.w);
+
+    typedef int32_t my_int;
+    my_int init_x = (rintf32)(initPose.pose.pose.position.x * 1000);
+    my_int init_y = (rintf32)(initPose.pose.pose.position.y * 1000);
+    my_int init_yaw = (rintf32)(GetYaw(0, 0, initPose.pose.pose.orientation.z, initPose.pose.pose.orientation.w) * 1000);
+    ROS_INFO("move_base.cpp-1209-init_x: %d", init_x);
+    ROS_INFO("move_base.cpp-1210-init_y: %d", init_y);
+    ROS_INFO("move_base.cpp-1211-init_yaw: %d", init_yaw);
+
+    std::stringstream ss;
+    ss << "rosservice call /SickLocSetPose {\"posex: " << init_x << ", posey: " << init_y << ", yaw: " << init_yaw << ", uncertainty: 1000\"}";
+    system(ss.str().c_str());
+    // system("rosservice call /SickLocSetPose {\"posex: 2000, posey: 1000, yaw: 30000, uncertainty: 1000\"}");
+  }
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   double MoveBase::distance(const geometry_msgs::PoseStamped& p1, const geometry_msgs::PoseStamped& p2)
@@ -1567,7 +1598,6 @@ namespace move_base {
   bool MoveBase::getRobotPose(geometry_msgs::PoseStamped& global_pose, costmap_2d::Costmap2DROS* costmap)
   {
     ROS_INFO("move_base.cpp-1517-getRobotPose");
-    // global_pose = robot_current_pose;
 
     tf2::toMsg(tf2::Transform::getIdentity(), global_pose.pose);
     geometry_msgs::PoseStamped robot_pose;

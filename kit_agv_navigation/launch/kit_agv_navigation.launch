@@ -16,7 +16,9 @@
   <arg name="frame_id_front"      default="base_laser_front"/>
   <arg name="frame_id_back"       default="base_laser_back"/>
 
-  <!-- <arg name="sensor_ip_front"     default="192.168.1.23" />
+  <!-- <arg name="topic_front"         default="/sick_safetyscanners_front"/>
+  <arg name="topic_back"          default="/sick_safetyscanners_back"/>
+  <arg name="sensor_ip_front"     default="192.168.1.23" />
   <arg name="sensor_ip_back"      default="192.168.1.22" />  
   <arg name="host_ip"             default="192.168.1.5"/>
   <arg name="host_udp_port_front" default="6060" />
@@ -69,8 +71,8 @@
   <node pkg="joint_state_publisher" type="joint_state_publisher" respawn="false" name="joint_state_publisher" output="screen"/>
 
   <!-- Motor Driver -->
-  <include file="$(find driver_blvd_controller)/launch/agvrun.launch">
-  </include>
+  <!-- <include file="$(find driver_blvd_controller)/launch/agvrun.launch">
+  </include> -->
 
   <!-- PLC -->
   <!-- <include file="$(find plc_fx5uc)/launch/plc.launch">
