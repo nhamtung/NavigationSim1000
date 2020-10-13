@@ -59,6 +59,7 @@
 #define MOTOR_DIRECTOIN_FORWARD 1
 #define MOTOR_DIRECTOIN_REVERSE 2
 
+#define MOTOR_STOP_BIT 	   	   0b00000000
 #define MOTOR_FORWARD_BIT      0b00001000
 #define MOTOR_REVERSE_BIT      0b00010000
 #define MOTOR_SLOW_CHANGE_BIT  0b00100000
@@ -105,7 +106,7 @@ void Mb_open_device(const char Mbc_port[], int Mbc_speed,	/* open device and con
 					int Mbc_parity, int Mbc_bit_l,
 					int Mbc_bit_s);	
 void Mb_close_device();										/* close device*/	
-void writeQuery(uint8_t address,uint8_t fnCode, uint8_t data[], uint16_t dataLen);
+ssize_t writeQuery(uint8_t address,uint8_t fnCode, uint8_t data[], uint16_t dataLen);
 uint16_t uint8tsToUint16t(uint8_t chars[]);
 uint8_t readQuery(uint8_t address, uint8_t fnCode, uint8_t data[], uint16_t dataLen); 
 uint8_t writeRegister(uint8_t address,uint16_t writeAddress, uint16_t data16bit); 

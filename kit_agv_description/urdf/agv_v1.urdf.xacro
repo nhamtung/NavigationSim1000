@@ -19,7 +19,7 @@
       <geometry>
         <mesh filename="package://kit_agv_description/meshes/agv_v1/ms3.stl" scale="0.01 0.01 0.01"/>
       </geometry>
-      <material name="red"/>
+      <material name="blue"/>
     </visual>
   </link>
   <joint name="base_laser_front_joint" type="fixed">
@@ -34,7 +34,7 @@
       <geometry>
         <mesh filename="package://kit_agv_description/meshes/agv_v1/ms3.stl" scale="0.01 0.01 0.01"/>
       </geometry>
-      <material name="red"/>
+      <material name="blue"/>
     </visual>
   </link>
   <joint name="base_laser_back_joint" type="fixed">
@@ -43,12 +43,41 @@
     <origin xyz="-0.431 -0.25 0" rpy="3.14 0 3.837777778"/>
   </joint>
 
-  
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 -1.57"/>  
+      <geometry>
+        <mesh filename="package://kit_agv_description/meshes/agv_v1/agv_v1.stl" scale="0.01 0.01 0.01"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <!-- <collision>
+      <origin xyz="-0.032 0 0.070" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.140 0.140 0.143"/>
+      </geometry>
+    </collision> -->
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="120"/>
+      <inertia ixx="10.9" ixy="0.0" ixz="0.0"
+               iyy="5.125" iyz="0.0"
+               izz="14.225" />
+    </inertial>
+    <!-- <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="170"/>
+      <inertia ixx="17.70833333" ixy="0.0" ixz="0.0"
+               iyy="9.527083333" iyz="0.0"
+               izz="20.15208333" />
+    </inertial> -->
+  </link>
+  <joint name="base_link_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0.0 0.085" rpy="0 0 0"/>
+  </joint>
 
-
-
-
-  
   <!-- <link name="wheel_right_link">
     <visual>
       <origin xyz="0 0 0" rpy="1.57 0 0"/>
@@ -81,35 +110,21 @@
     <axis xyz="0 0 1"/>
   </joint> -->
 
-  <link name="base_link">
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 -1.57"/>  
-      <geometry>
-        <mesh filename="package://kit_agv_description/meshes/agv_v1/agv_v1.stl" scale="0.01 0.01 0.01"/>
-      </geometry>
-      <material name="red"/>
-    </visual>
-    
-    <!-- <collision>
-      <origin xyz="-0.032 0 0.070" rpy="0 0 0"/>
-      <geometry>
-        <box size="0.140 0.140 0.143"/>
-      </geometry>
-    </collision>
 
-    <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="8.2573504e-01"/>
-      <inertia ixx="2.2124416e-03" ixy="-1.2294101e-05" ixz="3.4938785e-05"
-               iyy="2.1193702e-03" iyz="-5.0120904e-06"
-               izz="2.0064271e-03" />
-    </inertial> -->
-  </link>
-  <joint name="base_link_joint" type="fixed">
-    <parent link="base_footprint"/>
-    <child link="base_link"/>
-    <origin xyz="0 0.0 0.085" rpy="0 0 0"/>
-  </joint>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -18,6 +18,7 @@ char port[30];    //port name
 int baud;     	  //baud rate 
 int check_connect;
 struct stat sb;
+clock_t begin;
 
 //Process ROS receive from navigation message, send to uController
 void navigationCallback(const driver_blvd_controller::speed_wheel& robot)
@@ -126,7 +127,7 @@ int main(int argc, char **argv)
     //driver_blvd_controller::speed_wheel encoder;
     ros::Publisher speed_wheel = nh->advertise<driver_blvd_controller::speed_wheel>("wheel_encoder", 10);
 	
-	ros::Rate loop_rate(20); 
+	ros::Rate loop_rate(10); 
 	while(ros::ok())
 	{
 		/* onpen comport */
@@ -139,7 +140,7 @@ int main(int argc, char **argv)
 			{	
 				writeResetAlarm(i); 
 				writeSpeedControlMode(i,BLVD02KM_SPEED_MODE_USE_DIGITALS);
-				writeAcceleration(i,2);
+				writeAcceleration(i,5);
 				writeDeceleration(i,2);
 				writeSpeed(i,BLVD20KM_SPEED_MIN);
 				writeStop(i);
@@ -147,11 +148,18 @@ int main(int argc, char **argv)
 				clearWarningRecords(i);
 			}
 		}
-			
+		sleep(1);
 		while(ros::ok())
 		{
-			check_connect = stat(DEFAULT_SERIALPORT, &sb);
+			if((clock() - begin)/CLOCKS_PER_SEC >= 1)
+			{
+				ROS_WARN("156-check_connect: %f", check_connect);
+				check_connect = stat(DEFAULT_SERIALPORT, &sb);
+				begin = clock();
+			} 
+				
 			if(check_connect != 0){
+				ROS_WARN("162-check_connect: %f", check_connect);
 				for(int i= 0; i<4; i++) ROS_INFO("  ");
 				ROS_INFO("Disconnected");
 				break;
@@ -163,7 +171,7 @@ int main(int argc, char **argv)
 					writeForward(i);
 				}else if(speed[i-1] < 0){
 					writeReverse(i); 
-				}
+				}else writeStop(i);
 				writeSpeed(i,abs(speed[i-1]));
 				feedbackSpeed(i,&feedback_speed[i-1]);
 				readAlarm(i,&alarm_status[i-1]);
@@ -172,7 +180,7 @@ int main(int argc, char **argv)
 
 			// encoder.wheel_letf = (double)(feedback_speed[0]/30);
 			// encoder.wheel_right = (double)(feedback_speed[1]/30);
-			// speed_wheel.publish(encoder);
+			//speed_wheel.publish(encoder);
 			loop_rate.sleep();
 			ros::spinOnce();
 		}

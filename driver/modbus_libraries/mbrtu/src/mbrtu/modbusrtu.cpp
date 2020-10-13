@@ -256,6 +256,9 @@ uint16_t createMotorControl16bit(uint8_t motorDirection, bool freeLockOnStop = t
   // MB-FREE, -, STOP-MODE, REV, FWD, M1, M2, M0
   uint16_t bits = 0x0000;
   switch (motorDirection) {
+  case MOTOR_DIRECTOIN_STOP:
+  	bits |= MOTOR_STOP_BIT;
+  	break;
   case MOTOR_DIRECTOIN_REVERSE:
     bits |= MOTOR_REVERSE_BIT;
     break;
@@ -277,19 +280,19 @@ uint16_t createMotorControl16bit(uint8_t motorDirection, bool freeLockOnStop = t
 /*###############################################*/
 uint8_t writeForward(uint8_t address) 
 {
-	return writeRegister(address,ADDR_MOTOR_CONTROL, createMotorControl16bit(MOTOR_DIRECTOIN_FORWARD,false));
+	return writeRegister(address,ADDR_MOTOR_CONTROL, createMotorControl16bit(MOTOR_DIRECTOIN_FORWARD,true,false));
 }
 
 /*###############################################*/
 uint8_t writeStop(uint8_t address) 
 {
-	return writeRegister(address,ADDR_MOTOR_CONTROL, createMotorControl16bit(MOTOR_DIRECTOIN_STOP));
+	return writeRegister(address,ADDR_MOTOR_CONTROL, createMotorControl16bit(MOTOR_DIRECTOIN_STOP,false,false));
 }
 
 /*###############################################*/
 uint8_t writeReverse(uint8_t address) 
 {
-	return writeRegister(address,ADDR_MOTOR_CONTROL, createMotorControl16bit(MOTOR_DIRECTOIN_REVERSE,false));
+	return writeRegister(address,ADDR_MOTOR_CONTROL, createMotorControl16bit(MOTOR_DIRECTOIN_REVERSE,true,false));
 }
 
 /*###############################################*/
@@ -439,7 +442,7 @@ uint8_t writeRegister(uint8_t address, uint16_t writeAddress, uint16_t data16bit
 }
 
 /*#########################################################################*/
-void writeQuery(uint8_t address,uint8_t fnCode, uint8_t data[], uint16_t dataLen)
+ssize_t writeQuery(uint8_t address,uint8_t fnCode, uint8_t data[], uint16_t dataLen)
 {
 
 	usleep(C3_5_time); //delay ms
@@ -459,7 +462,7 @@ void writeQuery(uint8_t address,uint8_t fnCode, uint8_t data[], uint16_t dataLen
 		msg[i] = queryBuffer[i];
 	/* clean port */
 	tcflush(fd, TCIFLUSH);
-    write(fd,msg,(size_t)queryLen);
+  	return write(fd,msg,(size_t)queryLen);
 }
 
 /*##############################################################3##################*/
@@ -489,25 +492,23 @@ uint8_t readQuery(uint8_t address, uint8_t fnCode, uint8_t data[], uint16_t data
 	const unsigned long timeoutMs = 20;
 	uint8_t read_buf [BLVD20KM_QUERY_MAX_LEN];
 	memset(&read_buf, '\0', BLVD20KM_QUERY_MAX_LEN);
-	timeout.tv_sec = 2;
-	timeout.tv_usec = 500000;
+	timeout.tv_sec = 1;
+	timeout.tv_usec = 0;
 	FD_ZERO(&set); /* clear the set */
 	FD_SET(fd, &set); /* add our file descriptor to the set */
-	rv = select(fd +1, &set, NULL, NULL, &timeout);
-	if(rv == -1)
-	 	perror("select\n"); /* an error accured */
-	else if(rv == 0)
-	 	perror("timeout\n");  /* an timeout occured */ 
-	else
-	{
+    // while( (clock() - start)/(double)(CLOCKS_PER_SEC / 1000) <= timeoutMs)
+    // {
+    rv = select(fd +1, &set, NULL, NULL, &timeout);
+   	if(rv == -1)
+     	perror("select\n"); /* an error accured */
+    else if(rv == 0)
+     	perror("timeout\n");  /* an timeout occured */ 
+    else
 		queryLen = read(fd, &read_buf, BLVD20KM_QUERY_MAX_LEN);
-		// while( (clock() - start)/(double)(CLOCKS_PER_SEC / 1000) <= timeoutMs)
-		// {
-		// 	queryLen = read(fd, &read_buf, BLVD20KM_QUERY_MAX_LEN);
-		// 	if(queryLen > 0)
-		// 		break;  		
-		// }
-	}
+	// if(queryLen)
+	// 	break;  		
+  	// }
+
 	if (queryLen == 0) 
 		return BLVD20KM_ERROR_NO_RESPONSE;
 
