@@ -186,7 +186,6 @@ namespace move_base {
 
       ros::Subscriber initial_pose_sub_;
       void initialPoseReceived(const geometry_msgs::PoseWithCovarianceStampedConstPtr& msg);
-      // int safeFloatToInt(const FloatType &num);
 ////////////////////////////////////////////////////////////////////////
 
       bool isQuaternionValid(const geometry_msgs::Quaternion& q);
