@@ -71,12 +71,12 @@
   <node pkg="joint_state_publisher" type="joint_state_publisher" respawn="false" name="joint_state_publisher" output="screen"/>
 
   <!-- Motor Driver -->
-  <!-- <include file="$(find driver_blvd_controller)/launch/agvrun.launch">
-  </include> -->
+  <include file="$(find driver_blvd_controller)/launch/agvrun.launch">
+  </include>
 
   <!-- PLC -->
-  <!-- <include file="$(find plc_fx5uc)/launch/plc.launch">
-  </include> -->
+  <include file="$(find plc_fx5uc)/launch/plc.launch">
+  </include>
   
 
   <!-- rviz -->
