@@ -955,10 +955,12 @@ namespace move_base {
     isRotate = true;
     if(execute(current_position) == true){    //rotate to goal
       ROS_INFO("move_base.cpp-907-ROTATE DONE");
+      publishZeroVelocity();
       isRotate = false;
     }
     if(isRotate == false){
       ROS_INFO("move_base.cpp-911-goal.x=%.2f, goal.y=%.2f, goal.z=%.2f, goal.w=%.2f", goal.pose.position.x, goal.pose.position.y, goal.pose.orientation.z, goal.pose.orientation.w);
+      publishZeroVelocity();
       execute(goal);  //move to goal
     }
 
@@ -1324,6 +1326,7 @@ namespace move_base {
         if(tc_->isGoalReached()){
           ROS_INFO("move_base.cpp-1243-Goal reached!");
           ROS_DEBUG_NAMED("move_base","Goal reached!");
+          publishZeroVelocity();
           resetState();
 
           //disable the planner thread
@@ -1349,12 +1352,11 @@ namespace move_base {
 
         if(tc_->computeVelocityCommands(cmd_vel)){
           ROS_DEBUG_NAMED( "move_base", "Got a valid command from the local planner:  %.3lf, %.3lf, %.3lf", cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z);
-          ROS_INFO("move_base.cpp-1270-cmd_vel: x=%.3lf, y=%.3lf, angle=%.3lf", cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z);
 
           last_valid_control_ = ros::Time::now();
           //make sure that we send the velocity command to the base
           vel_pub_.publish(cmd_vel);
-          ROS_INFO("move_base.cpp-1295-publish cmd_vel!");
+          ROS_ERROR("move_base.cpp-1356-PUBLISH cmd_vel: x=%.3lf, y=%.3lf, angle=%.3lf", cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z);
           if(recovery_trigger_ == CONTROLLING_R)
             recovery_index_ = 0;
         }

@@ -17,9 +17,9 @@ local_costmap:
   rolling_window: true
   
   # INFO: Do rong cua costmap (m)
-  width: 5
+  width: 3
   # INFO: Chieu dai cua costmap (m)
-  height: 5
+  height: 3
   # INFO: Do phan giai cua costmap (resolution - m/cell)
   resolution: 0.05
   

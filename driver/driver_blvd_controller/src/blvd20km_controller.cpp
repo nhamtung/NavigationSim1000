@@ -28,13 +28,18 @@ void navigationCallback(const driver_blvd_controller::speed_wheel& robot)
 
     if(check_connect == 0)
     {
-    	ROS_INFO("Connected ");
-	    for(int i= 0; i<2; i++) ROS_INFO("  ");
-	    ROS_INFO("                 Wheel left      Wheel right");
-	    ROS_INFO("Command speed :  %d              %d", speed[0], speed[1]);
-		ROS_INFO("Feedback speed:  %d              %d",(int16_t)feedback_speed[0],(int16_t)feedback_speed[1]);
-		ROS_INFO("Warning record:  %x              %x",warning_status[0],warning_status[1]);
-		ROS_INFO("Alarm record  :  %x              %x",alarm_status[0],alarm_status[1]);
+    	// ROS_INFO("Connected ");
+	    // for(int i= 0; i<2; i++) ROS_INFO("  ");
+	    // ROS_INFO("                 Wheel left      Wheel right");
+	    // ROS_INFO("Command speed :  %d              %d", speed[0], speed[1]);
+		// ROS_INFO("Feedback speed:  %d              %d",(int16_t)feedback_speed[0],(int16_t)feedback_speed[1]);
+		
+		if ((warning_status[0] != 0) || (warning_status[1] != 0)){
+			ROS_WARN("Warning record:  %x              %x",warning_status[0],warning_status[1]);
+		}
+		if ((alarm_status[0] != 0) || (alarm_status[1] != 0)){
+			ROS_ERROR("Alarm record  :  %x              %x",alarm_status[0],alarm_status[1]);
+		}
     } 
 } //navigationCallback
 

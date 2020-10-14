@@ -304,8 +304,8 @@ namespace dwa_local_planner {
     geometry_msgs::PoseStamped goal_pose = global_plan_.back();
     Eigen::Vector3f goal(goal_pose.pose.position.x, goal_pose.pose.position.y, tf2::getYaw(goal_pose.pose.orientation));
     base_local_planner::LocalPlannerLimits limits = planner_util_->getCurrentLimits();
-    ROS_WARN("dwa_planner.cpp-307-limits.max_vel_trans: %f", limits.max_vel_trans);
-    ROS_WARN("dwa_planner.cpp-308-limits.max_vel_x: %f", limits.max_vel_x);
+    // ROS_WARN("dwa_planner.cpp-307-limits.max_vel_trans: %f", limits.max_vel_trans);
+    // ROS_WARN("dwa_planner.cpp-308-limits.max_vel_x: %f", limits.max_vel_x);
 
     // prepare cost functions and generators for this run
     generator_.initialise(pos,
@@ -314,7 +314,8 @@ namespace dwa_local_planner {
         &limits,
         vsamples_);
 
-    result_traj_.cost_ = -7;
+    result_traj_.cost_ = -10;
+    // ROS_WARN("dwa_planner.cpp-319-result_traj_.xv_: %f", result_traj_.xv_);
     // find best trajectory by sampling and scoring the samples
     std::vector<base_local_planner::Trajectory> all_explored;
     scored_sampling_planner_.findBestTrajectory(result_traj_, &all_explored);

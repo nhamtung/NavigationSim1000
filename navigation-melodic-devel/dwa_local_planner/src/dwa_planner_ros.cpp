@@ -194,10 +194,10 @@ namespace dwa_local_planner {
 
     geometry_msgs::PoseStamped robot_vel;
     odom_helper_.getRobotVel(robot_vel);
-    ROS_WARN("dwa_planner_ros.cpp-197-robot_vel.x: %f", robot_vel.pose.position.x);
-    ROS_WARN("dwa_planner_ros.cpp-198-robot_vel.y: %f", robot_vel.pose.position.y);
-    ROS_WARN("dwa_planner_ros.cpp-199-robot_vel.z: %f", robot_vel.pose.orientation.z);
-    ROS_WARN("dwa_planner_ros.cpp-200-robot_vel.w: %f", robot_vel.pose.orientation.w);
+    // ROS_WARN("dwa_planner_ros.cpp-197-robot_vel.x: %f", robot_vel.pose.position.x);
+    // ROS_WARN("dwa_planner_ros.cpp-198-robot_vel.y: %f", robot_vel.pose.position.y);
+    // ROS_WARN("dwa_planner_ros.cpp-199-robot_vel.z: %f", robot_vel.pose.orientation.z);
+    // ROS_WARN("dwa_planner_ros.cpp-200-robot_vel.w: %f", robot_vel.pose.orientation.w);
 
     /* For timing uncomment
     struct timeval start, end;
@@ -226,8 +226,7 @@ namespace dwa_local_planner {
     cmd_vel.linear.y = drive_cmds.pose.position.y;
     cmd_vel.angular.z = tf2::getYaw(drive_cmds.pose.orientation);
     ROS_WARN("dwa_planner_ros.cpp-224-cmd_vel.linear.x: %f", cmd_vel.linear.x);
-    ROS_WARN("dwa_planner_ros.cpp-225-cmd_vel.linear.y: %f", cmd_vel.linear.y);
-    ROS_WARN("dwa_planner_ros.cpp-226-cmd_vel.angular.z: %f", cmd_vel.angular.z);
+    ROS_WARN("dwa_planner_ros.cpp-225-cmd_vel.angular.z: %f", cmd_vel.angular.z);
 
     //if we cannot move... tell someone
     std::vector<geometry_msgs::PoseStamped> local_plan;

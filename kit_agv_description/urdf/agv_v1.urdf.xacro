@@ -57,6 +57,7 @@
         <box size="0.140 0.140 0.143"/>
       </geometry>
     </collision> -->
+
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <mass value="120"/>
@@ -64,6 +65,7 @@
                iyy="5.125" iyz="0.0"
                izz="14.225" />
     </inertial>
+    
     <!-- <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <mass value="170"/>
