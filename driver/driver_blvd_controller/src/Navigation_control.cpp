@@ -14,8 +14,8 @@
 
 #define Pi 3.1415926535
 #define rad_rpm 9.5492965964254
-#define L  0.255 // wheelbase (in meters per radian)
-#define R  0.075 //wheel radius (in meters per radian)
+#define L  0.5 // wheelbase (in meters per radian)
+#define R  0.085 //wheel radius (in meters per radian)
 int16_t W_l, W_r; // speed befor gear 
 clock_t start;
 const unsigned long timeoutMs = 1; //sec
@@ -51,7 +51,7 @@ void cmd_velCallback(const geometry_msgs::Twist& msg)
 
   if(abs(W_r) < BLVD20KM_SPEED_MIN) W_r = 0;
   if(abs(W_l) < BLVD20KM_SPEED_MIN) W_l = 0;
-  //ROS_INFO("Wheel left: %d  Wheel right: %d", W_l, W_r);
+  ROS_INFO("Wheel left: %d  Wheel right: %d", W_l, W_r);
 } //cmd_velCallback
 
 int main(int argc, char **argv)

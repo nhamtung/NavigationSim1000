@@ -33,8 +33,10 @@ catkin_package(
 #  DEPENDS system_lib
 )
 
+
+
 #blvd20km_controller
-add_executable(blvd20km_controller src/blvd20km_controller.cpp)
+add_executable(blvd20km_controller src/test.cpp)
 add_dependencies(blvd20km_controller ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(blvd20km_controller ${catkin_LIBRARIES})
 

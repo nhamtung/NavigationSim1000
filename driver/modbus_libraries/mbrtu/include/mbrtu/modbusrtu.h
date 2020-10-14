@@ -1,7 +1,6 @@
 //
 // Created by Hiep  on 10/2/2020.
 //
-
 #ifndef MODBUSPPMODBUSRTU_H
 #define MODBUSPPMODBUSRTU_H
 #pragma once 
@@ -15,13 +14,10 @@
 #include <termios.h> /* POSIX terminal control definitions */
 #include <time.h>	 /* delay */
 #include <cstdint>	 /* uin8_t */
-#include <stdlib.h>
+#include <stdlib.h>  
 
 
-#define DEFAULT_BAUDRATE 115200
-#define DEFAULT_SERIALPORT "/dev/AGV-BLDV20KM"
-
-#define C3_5_time 20000
+#define C3_5_time 10000
 #define FN_CODE_READ        0x03
 #define FN_CODE_WRITE       0x06
 #define FN_CODE_DIAGNOSIS   0x08
@@ -65,12 +61,6 @@
 #define MOTOR_SLOW_CHANGE_BIT  0b00100000
 #define MOTOR_FREE_ON_STOP_BIT 0b10000000
 
-
-// #define MOTOR_FORWARD_BIT      0b00000000
-// #define MOTOR_REVERSE_BIT      0b00100000
-// #define MOTOR_SLOW_CHANGE_BIT  0b00000000
-// #define MOTOR_FREE_ON_STOP_BIT 0b10000000
-
 #define BLVD20KM_QUERY_MAX_LEN 255
 #define BLVD20KM_ERROR_CODE_INVALID_FN        0x01
 #define BLVD20KM_ERROR_CODE_INVALID_ADDR      0x02
@@ -95,8 +85,8 @@ int fd;
 int rv;
 fd_set set;
 struct timeval timeout;
-static struct termios saved_tty_parameters;					/* old serial port setting (restored on close) */
-static struct termios Mb_tio;
+struct termios saved_tty_parameters;					/* old serial port setting (restored on close) */
+struct termios Mb_tio;
 
 /* buffer */ 
 uint8_t uint8Buffer[41];

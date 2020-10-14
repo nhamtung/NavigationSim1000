@@ -286,7 +286,7 @@ uint8_t writeForward(uint8_t address)
 /*###############################################*/
 uint8_t writeStop(uint8_t address) 
 {
-	return writeRegister(address,ADDR_MOTOR_CONTROL, createMotorControl16bit(MOTOR_DIRECTOIN_STOP,false,false));
+	return writeRegister(address,ADDR_MOTOR_CONTROL, createMotorControl16bit(MOTOR_DIRECTOIN_STOP,true,false));
 }
 
 /*###############################################*/
@@ -487,17 +487,15 @@ uint8_t readRegisters(uint8_t address, uint16_t readStartAddress, uint16_t dataL
 /*####################################################################################*/
 uint8_t readQuery(uint8_t address, uint8_t fnCode, uint8_t data[], uint16_t dataLen)
 {
-	uint16_t queryLen = 0;
-	clock_t  start = clock();
-	const unsigned long timeoutMs = 20;
+	uint16_t queryLen = 0;	
 	uint8_t read_buf [BLVD20KM_QUERY_MAX_LEN];
 	memset(&read_buf, '\0', BLVD20KM_QUERY_MAX_LEN);
+	usleep(100);
 	timeout.tv_sec = 1;
 	timeout.tv_usec = 0;
 	FD_ZERO(&set); /* clear the set */
 	FD_SET(fd, &set); /* add our file descriptor to the set */
-    // while( (clock() - start)/(double)(CLOCKS_PER_SEC / 1000) <= timeoutMs)
-    // {
+   
     rv = select(fd +1, &set, NULL, NULL, &timeout);
    	if(rv == -1)
      	perror("select\n"); /* an error accured */
@@ -505,9 +503,6 @@ uint8_t readQuery(uint8_t address, uint8_t fnCode, uint8_t data[], uint16_t data
      	perror("timeout\n");  /* an timeout occured */ 
     else
 		queryLen = read(fd, &read_buf, BLVD20KM_QUERY_MAX_LEN);
-	// if(queryLen)
-	// 	break;  		
-  	// }
 
 	if (queryLen == 0) 
 		return BLVD20KM_ERROR_NO_RESPONSE;

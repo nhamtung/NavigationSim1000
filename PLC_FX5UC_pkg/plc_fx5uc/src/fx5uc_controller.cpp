@@ -55,23 +55,31 @@ int main(int argc, char **argv)
         if(bitM[0] == ON)// Nếu M0 on 
         {
             if(bitM[5] == ON){
-                device.D[1] = NO_CL;
-                m1m2m3[0] = ON; m1m2m3[1] = OFF; m1m2m3[2] = OFF;
-            }
-
-            else if(bitM[6] == ON){
                 device.D[1] = RED;
                 m1m2m3[0] = ON;m1m2m3[1] = ON;m1m2m3[2] = OFF;
             }
+
+            else if(bitM[6] == ON){
+                device.D[1] = YELLOW;
+                m1m2m3[0] = ON;m1m2m3[1] = ON;m1m2m3[2] = OFF;
+            }
             else if(bitM[7]== ON){
-                device.D[1] = BULE;
+                device.D[1] = YELLOW;
                 m1m2m3[0] = ON;m1m2m3[1] = OFF;m1m2m3[2] = OFF;
+            }
+            else if(bitM[8]== ON){
+            device.D[1] = GREEN;
+            m1m2m3[0] = ON;m1m2m3[1] = OFF;m1m2m3[2] = OFF;
+            }
+            else if(bitM[9]== ON){
+            device.D[1] = BULE;
+            m1m2m3[0] = ON;m1m2m3[1] = OFF;m1m2m3[2] = OFF;
             }
             fx5uc->modbus_write_coils(Mbit+1, 3,m1m2m3); 
             fx5uc->modbus_write_register(0, device.D[1]); 
         } else ROS_INFO("not listen"); 
-        diagnomic_reg();
-        cmd_PLC.publish(plc_msg);                                           
+        //diagnomic_reg();
+        //cmd_PLC.publish(plc_msg);                                           
         loop_rate.sleep();
         ros::spinOnce();
     }
