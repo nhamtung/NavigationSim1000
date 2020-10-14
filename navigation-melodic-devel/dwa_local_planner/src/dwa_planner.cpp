@@ -304,6 +304,8 @@ namespace dwa_local_planner {
     geometry_msgs::PoseStamped goal_pose = global_plan_.back();
     Eigen::Vector3f goal(goal_pose.pose.position.x, goal_pose.pose.position.y, tf2::getYaw(goal_pose.pose.orientation));
     base_local_planner::LocalPlannerLimits limits = planner_util_->getCurrentLimits();
+    ROS_WARN("dwa_planner.cpp-307-limits.max_vel_trans: %f", limits.max_vel_trans);
+    ROS_WARN("dwa_planner.cpp-308-limits.max_vel_x: %f", limits.max_vel_x);
 
     // prepare cost functions and generators for this run
     generator_.initialise(pos,

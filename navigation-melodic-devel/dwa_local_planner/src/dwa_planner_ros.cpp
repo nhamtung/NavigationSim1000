@@ -194,6 +194,10 @@ namespace dwa_local_planner {
 
     geometry_msgs::PoseStamped robot_vel;
     odom_helper_.getRobotVel(robot_vel);
+    ROS_WARN("dwa_planner_ros.cpp-197-robot_vel.x: %f", robot_vel.pose.position.x);
+    ROS_WARN("dwa_planner_ros.cpp-198-robot_vel.y: %f", robot_vel.pose.position.y);
+    ROS_WARN("dwa_planner_ros.cpp-199-robot_vel.z: %f", robot_vel.pose.orientation.z);
+    ROS_WARN("dwa_planner_ros.cpp-200-robot_vel.w: %f", robot_vel.pose.orientation.w);
 
     /* For timing uncomment
     struct timeval start, end;

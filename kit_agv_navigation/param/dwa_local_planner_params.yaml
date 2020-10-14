@@ -1,7 +1,7 @@
 DWAPlannerROS:
 
 # Robot Configuration Parameters (m/s)
-  max_vel_x: 1.5  # (double, default: 0.55) The maximum x velocity for the robot in m/s 
+  max_vel_x: 0.8  # (double, default: 0.55) The maximum x velocity for the robot in m/s 
   min_vel_x: 0.1 #  (double, default: 0.0) The minimum x velocity for the robot in m/s 
   # max_vel_x: 0.15  # (double, default: 0.55) The maximum x velocity for the robot in m/s 
   # min_vel_x: -0.15 #  (double, default: 0.0) The minimum x velocity for the robot in m/s 
