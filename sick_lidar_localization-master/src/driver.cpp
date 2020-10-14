@@ -101,14 +101,14 @@ int main(int argc, char** argv)
   // Advertise service "SickLocColaTelegram" to send and receive Cola-ASCII telegrams to resp. from the localization server (request and response)
   ros::ServiceServer service = nh.advertiseService("SickLocColaTelegram", &sick_lidar_localization::DriverMonitor::serviceCbColaTelegram, &driver_monitor);
   ROS_INFO_STREAM("sim_loc_driver advertising service \"SickLocColaTelegram\" for Cola commands, message type SickLocColaTelegramSrv");
-  
+
   // Start driver threads to connect to localization controller and to monitor driver messages
   if(!driver_monitor.start())
   {
     ROS_ERROR_STREAM("## ERROR sim_loc_driver: could not start driver monitor thread, exiting");
     return EXIT_FAILURE;
   }
-  
+
   // Run ros event loop
   ros::spin();
   

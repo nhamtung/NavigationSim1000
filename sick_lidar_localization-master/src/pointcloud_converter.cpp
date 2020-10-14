@@ -79,6 +79,14 @@ int main(int argc, char** argv)
   // Start pointcloud converter thread
   pointcloud_converter.start();
   
+  //////// Add by TungNV
+  ROS_INFO("pointcloud_converter.cpp-83-Enable Sim1000");
+  system("sleed 3");
+  // rosservice call SickLocColaTelegram "{cola_ascii_request: 'sMN LocStartLocalizing', wait_response_timeout: 1}"
+  system("rosservice call /SickLocColaTelegram {\"cola_ascii_request: 'sMN LocStartLocalizing', wait_response_timeout: 0\"}");
+  ///////////////////////////////////////////////////////////////////////////////////////
+  
+  
   // Run ros event loop
   ros::spin();
   

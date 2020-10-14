@@ -188,7 +188,8 @@ void sick_lidar_localization::DriverMonitor::messageCbResultPortTelegrams(const 
  */
 bool sick_lidar_localization::DriverMonitor::serviceCbColaTelegram(sick_lidar_localization::SickLocColaTelegramSrv::Request & cola_request, sick_lidar_localization::SickLocColaTelegramSrv::Response & cola_response)
 {
-  ROS_INFO_STREAM("DriverMonitor::serviceCbColaTelegram: starting Cola request { " << sick_lidar_localization::Utils::flattenToString(cola_request) << " }");
+  ///// Edit by TungNV
+  // ROS_INFO_STREAM("driver_monitor.cpp-191-DriverMonitor::serviceCbColaTelegram: starting Cola request { " << sick_lidar_localization::Utils::flattenToString(cola_request) << " }");
   boost::lock_guard<boost::mutex> service_cb_lockguard(m_service_cb_mutex); // one service request at a time
   // initialize cola_response with default values
   cola_response.cola_ascii_response = "";
@@ -223,7 +224,8 @@ bool sick_lidar_localization::DriverMonitor::serviceCbColaTelegram(sick_lidar_lo
   }
   // Convert reponse from controller to Cola-ASCII telegram
   bool is_binary_cola = sick_lidar_localization::ColaAsciiBinaryConverter::IsColaBinary(binary_response);
-  ROS_INFO_STREAM("DriverMonitor::serviceCbColaTelegram: " << (is_binary_cola?"cola-binary":"cola-ascii") << " response received (hex): " << sick_lidar_localization::Utils::toHexString(binary_response));
+  ///// Edit by TungNV
+  // ROS_INFO_STREAM("driver_monitor.cpp-227-DriverMonitor::serviceCbColaTelegram: " << (is_binary_cola?"cola-binary":"cola-ascii") << " response received (hex): " << sick_lidar_localization::Utils::toHexString(binary_response));
   if(m_cola_binary && is_binary_cola) // if(cola_request.send_binary)
     binary_response = sick_lidar_localization::ColaAsciiBinaryConverter::ColaBinaryToColaAscii(binary_response);
   cola_response.cola_ascii_response = sick_lidar_localization::ColaAsciiBinaryConverter::ConvertColaAscii(binary_response);
@@ -237,7 +239,8 @@ bool sick_lidar_localization::DriverMonitor::serviceCbColaTelegram(sick_lidar_lo
     cola_response.send_timestamp_nsec = send_timestamp.nsec;        // Send timestamp (nano seconds part of ros timestamp immediately before tcp send)
     cola_response.receive_timestamp_sec = receive_timestamp.sec;    // Receive timestamp (seconds part of ros timestamp immediately after first response byte received)
     cola_response.receive_timestamp_nsec = receive_timestamp.nsec;  // Receive timestamp (nano seconds part of ros timestamp immediately after first response byte received)
-    ROS_INFO_STREAM("DriverMonitor::serviceCbColaTelegram: finished Cola request { " << sick_lidar_localization::Utils::flattenToString(cola_request) << " } with response { " << sick_lidar_localization::Utils::flattenToString(cola_response) << " }");
+    ///// Edit by TungNV
+    // ROS_INFO_STREAM("driver_monitor.cpp-240-DriverMonitor::serviceCbColaTelegram: finished Cola request { " << sick_lidar_localization::Utils::flattenToString(cola_request) << " } with response { " << sick_lidar_localization::Utils::flattenToString(cola_response) << " }");
     return true;
   }
   else

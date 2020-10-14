@@ -197,11 +197,14 @@ bool sick_lidar_localization::TimeSyncService::serviceCbRequestTimestamp(sick_li
   time_sync_msg.request.timestamp_lidar_ms = service_response.timestamp_lidar_ms;
   if(serviceCbTimeSync(time_sync_msg.request, time_sync_msg.response) && time_sync_msg.response.vehicle_time_valid)
     ROS_INFO_STREAM("TimeSyncService::serviceCbRequestTimestamp(): Lidar ticks: " << service_response.timestamp_lidar_ms << ", Systemtime: " << time_sync_msg.response.vehicle_time_sec << "." << time_sync_msg.response.vehicle_time_sec);
-  else if(isSoftwarePllInitialized())
-    ROS_WARN_STREAM("## ERROR TimeSyncService::serviceCbRequestTimestamp(): service \"SickLocTimeSync\" failed, could not get system time from ticks");
-  else
-    ROS_INFO_STREAM("TimeSyncService::serviceCbRequestTimestamp(): no system time from ticks, software pll still initializing");
-  
+  else if(isSoftwarePllInitialized()){
+    ///// Edit by TungNV
+    // ROS_WARN_STREAM("time_sync_service.cpp-202-ERROR TimeSyncService::serviceCbRequestTimestamp(): service \"SickLocTimeSync\" failed, could not get system time from ticks");
+  }
+  else{
+    ///// Edit by TungNV
+    // ROS_INFO_STREAM("time_sync_service.cpp-205-TimeSyncService::serviceCbRequestTimestamp(): no system time from ticks, software pll still initializing");
+  }
   return true;
 }
 
@@ -262,7 +265,8 @@ bool sick_lidar_localization::TimeSyncService::serviceCbTimeSync(sick_lidar_loca
     time_sync_response.vehicle_time_sec = system_timestamp.sec;
     time_sync_response.vehicle_time_nsec = system_timestamp.nsec;
     time_sync_response.vehicle_time_valid = true;
-    ROS_INFO_STREAM("TimeSyncService::serviceCbTimeSync(): Lidar ticks: " << ticks << ", Systemtime: " << time_sync_response.vehicle_time_sec << "." << time_sync_response.vehicle_time_nsec);
+    ///// Edit by TungNV
+    // ROS_INFO_STREAM("time_sync_service.cpp-265-TimeSyncService::serviceCbTimeSync(): Lidar ticks: " << ticks << ", Systemtime: " << time_sync_response.vehicle_time_sec << "." << time_sync_response.vehicle_time_nsec);
   }
   else if(software_pll_send_time.IsInitialized() && software_pll_receive_time.IsInitialized())
     ROS_WARN_STREAM("## ERROR TimeSyncService::serviceCbTimeSync(): SoftwarePLL::GetCorrectedTimeStamp() failed");
@@ -329,8 +333,8 @@ void sick_lidar_localization::TimeSyncService::runTimeSyncThreadCb(void)
       else
       {
         time_sync_cnt++;
-        ROS_INFO_STREAM("TimeSyncService::runTimeSyncThreadCb(): ros service \"SickLocRequestTimestamp\" successfull, response: "
-          << sick_lidar_localization::Utils::flattenToString(timestamp_service.response));
+        ///// Edit by TungNV
+        // ROS_INFO_STREAM("time_sync_service.cpp-333-TimeSyncService::runTimeSyncThreadCb(): ros service \"SickLocRequestTimestamp\" successfull, response: " << sick_lidar_localization::Utils::flattenToString(timestamp_service.response));
       }
     }
   }

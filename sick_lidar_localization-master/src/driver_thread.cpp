@@ -346,8 +346,10 @@ void sick_lidar_localization::DriverThread::runConverterThreadCb(void)
           }
           else if((ros::Time::now() - timestamp_first_telegram).toSec() <= m_software_pll_expected_initialization_duration) // software pll still initializing
             ROS_DEBUG_STREAM("sim_loc_driver: no system time from ticks, software pll still initializing");
-          else // time sync error
-            ROS_WARN_STREAM("driver_thread.cpp-350-## ERROR: service \"SickLocTimeSync\" failed, could not get system time from ticks");
+          else{ // time sync error
+            ///// Edit by TungNV
+            // ROS_WARN_STREAM("driver_thread.cpp-350-## ERROR: service \"SickLocTimeSync\" failed, could not get system time from ticks");
+          }
           // Publish the decoded result port telegram (type SickLocResultPortTelegramMsg)
           m_result_telegrams_publisher.publish(result_telegram);
           // ROS_INFO_STREAM("driver_thread.cpp-353-result telegram received " << sick_lidar_localization::Utils::toHexString(binary_telegram) << ", published " << sick_lidar_localization::Utils::flattenToString(result_telegram));
