@@ -95,16 +95,16 @@ namespace move_base {
     current_pose_pub_ = n.advertise<geometry_msgs::PoseStamped>("current_pose", 0);
     ROS_INFO("move_base.cpp-93-Publish topic: /current_pose");
 
-    // Subscriber the service: lift_up
+    // Subscriber the service: lift_up_
     lift_up_client_ = n.serviceClient<move_base::lift_up>("lift_up_");
     ROS_INFO("move_base.cpp-100-Call service: lift_up_");
-    // Subscriber the service: lift_down
+    // Subscriber the service: lift_down_
     lift_down_client_ = n.serviceClient<move_base::lift_up>("lift_down_");
     ROS_INFO("move_base.cpp-103-Call service: lift_down_");
-    // Subscriber the service: lift_down
+    // Subscriber the service: charging_in_
     charging_in_client_ = n.serviceClient<move_base::lift_up>("charging_in_");
     ROS_INFO("move_base.cpp-106-Call service: charging_in_");
-    // Subscriber the service: lift_down
+    // Subscriber the service: charging_out_
     charging_out_client_ = n.serviceClient<move_base::lift_up>("charging_out_");
     ROS_INFO("move_base.cpp-109-Call service: charging_out_");
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
