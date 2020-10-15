@@ -1232,8 +1232,12 @@ namespace move_base {
     system(ss.str().c_str());
     // system("rosservice call /SickLocSetPose {\"posex: 2000, posey: 1000, yaw: 30000, uncertainty: 1000\"}");
   }
-  void MoveBase::initialAgvAction(const move_base::agv_action& msg)
+  void MoveBase::initialAgvAction(const move_base::agv_actionConstPtr& msg)
   {
+    ROS_INFO("move_base.cpp-1237-initialAgvAction()");
+
+    ROS_INFO("move_base.cpp-1239-action: %d", msg->action);
+    ROS_INFO("move_base.cpp-1240-status: %d", msg->status);
   }
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

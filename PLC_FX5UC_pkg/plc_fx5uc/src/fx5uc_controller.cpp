@@ -77,7 +77,7 @@ int main(int argc, char **argv)
             }
             fx5uc->modbus_write_coils(Mbit+1, 3,m1m2m3); 
             fx5uc->modbus_write_register(0, device.D[1]); 
-        } else ROS_INFO("not listen"); 
+        } else ROS_INFO("fx5uc_controller.cpp-80-not listen"); 
         //diagnomic_reg();
         //cmd_PLC.publish(plc_msg);                                           
         loop_rate.sleep();

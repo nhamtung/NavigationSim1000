@@ -188,7 +188,7 @@ namespace move_base {
 
       ros::Subscriber initial_pose_sub_, agv_action_;
       void initialPoseReceived(const geometry_msgs::PoseWithCovarianceStampedConstPtr& msg);
-      void initialAgvAction(const move_base::agv_action& msg);
+      void initialAgvAction(const move_base::agv_actionConstPtr& msg);
 ////////////////////////////////////////////////////////////////////////
 
       bool isQuaternionValid(const geometry_msgs::Quaternion& q);
