@@ -61,6 +61,8 @@
 #include "move_base/MoveBaseConfig.h"
 #include "std_msgs/Int32.h"
 
+#include <move_base/agv_action.h>
+
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
 
 namespace move_base {
@@ -132,7 +134,7 @@ namespace move_base {
       bool makePlan(const geometry_msgs::PoseStamped& goal, std::vector<geometry_msgs::PoseStamped>& plan);
 
       /**
-       * @brief  Load the recovery behaviors for the navigation stack from the parameter server
+       * @brief  Load the recoverConstPtry behaviors for the navigation stack from the parameter server
        * @param node The ros::NodeHandle to be used for loading parameters 
        * @return True if the recovery behaviors were loaded successfully, false otherwise
        */
@@ -145,7 +147,7 @@ namespace move_base {
 
       /**
        * @brief  Clears obstacles within a window around the robot
-       * @param size_x The x size of the window
+       * @param size_x The x sizeConstPtr of the window
        * @param size_y The y size of the window
        */
       void clearCostmapWindows(double size_x, double size_y);
@@ -184,8 +186,9 @@ namespace move_base {
       void RemoveAllList(std::list<move_base_msgs::MoveBaseActionGoal> list);
       bool execute(geometry_msgs::PoseStamped goal);
 
-      ros::Subscriber initial_pose_sub_;
+      ros::Subscriber initial_pose_sub_, agv_action_;
       void initialPoseReceived(const geometry_msgs::PoseWithCovarianceStampedConstPtr& msg);
+      void initialAgvAction(const move_base::agv_action& msg);
 ////////////////////////////////////////////////////////////////////////
 
       bool isQuaternionValid(const geometry_msgs::Quaternion& q);

@@ -52,6 +52,8 @@
 
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
 
+#include <move_base/agv_action.h>
+
 namespace move_base {
 
   MoveBase::MoveBase(tf2_ros::Buffer& tf) :
@@ -78,13 +80,19 @@ namespace move_base {
 
     //Subscribe the topic /sick_lidar_localization/driver/result_telegrams
     pose_ = n.subscribe<sick_lidar_localization::SickLocResultPortTelegramMsg>("sick_lidar_localization/driver/result_telegrams", 1, boost::bind(&MoveBase::getCurrentPose, this, _1));
-    ROS_INFO("move_base.cpp-85-Subscriber topic: /sick_lidar_localization/driver/result_telegrams");
+    ROS_INFO("move_base.cpp-81-Subscriber topic: /sick_lidar_localization/driver/result_telegrams");
 
     //Subscribe the topic /initialpose
     initial_pose_sub_ = n.subscribe("initialpose", 2, &MoveBase::initialPoseReceived, this);
+    ROS_INFO("move_base.cpp-85-Subscriber topic: /initialpose");
 
+    //Subscribe the topic /agv_action
+    agv_action_ = n.subscribe("agv_action", 2, &MoveBase::initialAgvAction, this);
+    ROS_INFO("move_base.cpp-85-Subscriber topic: /agv_action");
+    
     // Publish the topic /current_pose
     current_pose_pub_ = n.advertise<geometry_msgs::PoseStamped>("current_pose", 0);
+    ROS_INFO("move_base.cpp-93-Publish topic: /current_pose");
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     ros::NodeHandle private_nh("~");
@@ -1223,6 +1231,9 @@ namespace move_base {
     ss << "rosservice call /SickLocSetPose {\"posex: " << init_x << ", posey: " << init_y << ", yaw: " << init_yaw << ", uncertainty: 1000\"}";
     system(ss.str().c_str());
     // system("rosservice call /SickLocSetPose {\"posex: 2000, posey: 1000, yaw: 30000, uncertainty: 1000\"}");
+  }
+  void MoveBase::initialAgvAction(const move_base::agv_action& msg)
+  {
   }
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

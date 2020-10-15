@@ -79,8 +79,8 @@
   </include>
 
   <!-- rviz -->
-  <arg name="open_rviz" default="true"/>
-  <!-- <arg name="open_rviz" default="false"/> -->
+  <!-- <arg name="open_rviz" default="true"/> -->
+  <arg name="open_rviz" default="false"/>
   <group if="$(arg open_rviz)"> 
     <node pkg="rviz" type="rviz" name="rviz" required="true"
           args="-d $(find kit_agv_navigation)/rviz/kit_agv_navigation.rviz"/>
