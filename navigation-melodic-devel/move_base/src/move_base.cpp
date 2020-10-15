@@ -53,6 +53,7 @@
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
 
 #include <move_base/agv_action.h>
+#include <move_base/lift_up.h>
 
 namespace move_base {
 
@@ -93,6 +94,19 @@ namespace move_base {
     // Publish the topic /current_pose
     current_pose_pub_ = n.advertise<geometry_msgs::PoseStamped>("current_pose", 0);
     ROS_INFO("move_base.cpp-93-Publish topic: /current_pose");
+
+    // Subscriber the service: lift_up
+    lift_up_client_ = n.serviceClient<move_base::lift_up>("lift_up_");
+    ROS_INFO("move_base.cpp-100-Call service: lift_up_");
+    // Subscriber the service: lift_down
+    lift_down_client_ = n.serviceClient<move_base::lift_up>("lift_down_");
+    ROS_INFO("move_base.cpp-103-Call service: lift_down_");
+    // Subscriber the service: lift_down
+    charging_in_client_ = n.serviceClient<move_base::lift_up>("charging_in_");
+    ROS_INFO("move_base.cpp-106-Call service: charging_in_");
+    // Subscriber the service: lift_down
+    charging_out_client_ = n.serviceClient<move_base::lift_up>("charging_out_");
+    ROS_INFO("move_base.cpp-109-Call service: charging_out_");
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     ros::NodeHandle private_nh("~");
@@ -153,7 +167,7 @@ namespace move_base {
     private_nh.param("clearing_rotation_allowed", clearing_rotation_allowed_, true);
     private_nh.param("recovery_behavior_enabled", recovery_behavior_enabled_, true);
 
-    //create the ros wrapper for the planner's costmap... and initializer a pointer we'll use with the underlying map
+    //create the charging_in_client_ros wrapper for the planner's costmap... and initializer a pointer we'll use with the underlying map
     ROS_INFO("move_base.cpp-142-Create a global_costmap");
     planner_costmap_ros_ = new costmap_2d::Costmap2DROS("global_costmap", tf_);
     planner_costmap_ros_->pause();
@@ -166,7 +180,7 @@ namespace move_base {
       ROS_INFO("move_base.cpp-151-Created global_planner: %s", global_planner.c_str());
     } catch (const pluginlib::PluginlibException& ex) {
       ROS_FATAL("Failed to create the %s planner, are you sure it is properly registered and that the containing library is built? Exception: %s", global_planner.c_str(), ex.what());
-      ROS_ERROR("move_base.cpp-153-Failed to create the %s planner, are you sure it is properly registered and that the containing library is built? Exception: %s", global_planner.c_str(), ex.what());
+      ROS_ERROR("charging_in_client_move_base.cpp-153-Failed to create the %s planner, are you sure it is properly registered and that the containing library is built? Exception: %s", global_planner.c_str(), ex.what());
       exit(1);
     }
 
@@ -1235,9 +1249,48 @@ namespace move_base {
   void MoveBase::initialAgvAction(const move_base::agv_actionConstPtr& msg)
   {
     ROS_INFO("move_base.cpp-1237-initialAgvAction()");
+    uint8_t action, status;
+    action = msg->action;
+    status = msg->status;
+    ROS_INFO("move_base.cpp-1239-action: %d", action);
+    ROS_INFO("move_base.cpp-1240-status: %d", status);
 
-    ROS_INFO("move_base.cpp-1239-action: %d", msg->action);
-    ROS_INFO("move_base.cpp-1240-status: %d", msg->status);
+    action_state = ActionState(action);
+    move_base::lift_up srv;
+    switch(action_state){
+      case ACTION_MANUAL:
+        break;
+      case ACTION_MOVE_BASE:
+        break;
+      case ACTION_INITIAL_POSE:
+        break;
+      case ACTION_CHARGING_IN:
+        charging_in_client_.call(srv);
+        break;
+      case ACTION_CHARGING_OUT:
+        charging_out_client_.call(srv);
+        break;
+      case ACTION_LIFT_UP:
+        srv.request.a = msg->action;
+        srv.request.b = msg->status;
+
+        ROS_INFO("move_base.cpp-1239-srv.request.a: %d", srv.request.a);
+        ROS_INFO("move_base.cpp-1240-srv.request.b: %d", srv.request.b);
+        if (lift_up_client_.call(srv))
+        {
+          ROS_INFO("move_base.cpp-1254-Sum: %ld", (long int)srv.response.sum);
+        }
+        else
+        {
+          ROS_ERROR("move_base.cpp-1258-Failed to call service add_two_ints");
+        }
+        break;
+      case ACTION_LIFT_DOWN:
+        lift_down_client_.call(srv);
+        break;
+      default:
+      {}
+    }
   }
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

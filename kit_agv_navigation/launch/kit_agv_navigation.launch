@@ -55,9 +55,9 @@
 
   <!-- sick_lidar_localization -->
   <arg name="sim1000_ip" default="192.168.1.1"/>
-  <include file="$(find sick_lidar_localization)/launch/sim_loc_driver.launch">
+  <!-- <include file="$(find sick_lidar_localization)/launch/sim_loc_driver.launch">
     <arg name="localization_controller_ip_address" value="$(arg sim1000_ip)"/>
-  </include>
+  </include> -->
 
   <!-- move_base -->
   <arg name="move_forward_only" default="false"/>

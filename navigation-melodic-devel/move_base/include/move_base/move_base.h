@@ -62,6 +62,7 @@
 #include "std_msgs/Int32.h"
 
 #include <move_base/agv_action.h>
+#include <move_base/lift_up.h>
 
 #include "geometry_msgs/PoseWithCovarianceStamped.h"
 
@@ -73,6 +74,16 @@ namespace move_base {
     PLANNING,
     CONTROLLING,
     CLEARING
+  };
+
+  enum ActionState {
+    ACTION_MANUAL,
+    ACTION_MOVE_BASE,
+    ACTION_INITIAL_POSE,
+    ACTION_CHARGING_IN,
+    ACTION_CHARGING_OUT,
+    ACTION_LIFT_UP,
+    ACTION_LIFT_DOWN
   };
 
   enum RecoveryTrigger
@@ -113,7 +124,7 @@ namespace move_base {
        * @brief  A service call that clears the costmaps of obstacles
        * @param req The service request 
        * @param resp The service response
-       * @return True if the service call succeeds, false otherwise
+       * @return True if thcharging_in_client_e service call succeeds, false otherwise
        */
       bool clearCostmapsService(std_srvs::Empty::Request &req, std_srvs::Empty::Response &resp);
 
@@ -135,7 +146,7 @@ namespace move_base {
 
       /**
        * @brief  Load the recoverConstPtry behaviors for the navigation stack from the parameter server
-       * @param node The ros::NodeHandle to be used for loading parameters 
+       * @param node The roscharging_in_client_::NodeHandle to be used for loading parameters 
        * @return True if the recovery behaviors were loaded successfully, false otherwise
        */
       bool loadRecoveryBehaviors(ros::NodeHandle node);
@@ -189,6 +200,8 @@ namespace move_base {
       ros::Subscriber initial_pose_sub_, agv_action_;
       void initialPoseReceived(const geometry_msgs::PoseWithCovarianceStampedConstPtr& msg);
       void initialAgvAction(const move_base::agv_actionConstPtr& msg);
+      ros::ServiceClient lift_up_client_, lift_down_client_, charging_in_client_, charging_out_client_;
+      ActionState action_state;
 ////////////////////////////////////////////////////////////////////////
 
       bool isQuaternionValid(const geometry_msgs::Quaternion& q);

@@ -30,7 +30,6 @@
 #include <move_base/move_base.h>
 #include <tf2_ros/transform_listener.h>
 
-
 int main(int argc, char** argv){
   ROS_INFO("move_base_node.cpp-35-main");
 
