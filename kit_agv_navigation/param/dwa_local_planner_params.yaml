@@ -3,8 +3,6 @@ DWAPlannerROS:
 # Robot Configuration Parameters (m/s)
   max_vel_x: 0.55  # (double, default: 0.55) The maximum x velocity for the robot in m/s 
   min_vel_x: 0.0 #  (double, default: 0.0) The minimum x velocity for the robot in m/s 
-  # max_vel_x: 0.15  # (double, default: 0.55) The maximum x velocity for the robot in m/s 
-  # min_vel_x: -0.15 #  (double, default: 0.0) The minimum x velocity for the robot in m/s 
 
   max_vel_y: 0.0  # (double, default: 0.1) The maximum y velocity for the robot in m/s 
   min_vel_y: 0.0  # (double, default: -0.1) The minimum y velocity for the robot in m/s 
@@ -26,7 +24,7 @@ DWAPlannerROS:
 
 # Goal Tolerance Parametes (m)
   # xy_goal_tolerance: 0.05  # (double, default: 0.10) The tolerance in meters for the controller in the x & y distance when achieving a goal
-  xy_goal_tolerance: 0.2  # (double, default: 0.10) The tolerance in meters for the controller in the x & y distance when achieving a goal
+  xy_goal_tolerance: 0.1  # (double, default: 0.10) The tolerance in meters for the controller in the x & y distance when achieving a goal
   # yaw_goal_tolerance: 0.17       # (double, default: 0.05) The tolerance in radians for the controller in yaw/rotation when achieving its goal 
   yaw_goal_tolerance: 0.1
   # latch_xy_goal_tolerance: false # (bool, default: false) If goal tolerance is latched, if the robot ever reaches the goal xy location it will simply rotate in place, even if it ends up outside the goal tolerance while it is doing so
@@ -38,7 +36,7 @@ DWAPlannerROS:
   vx_samples: 3  # (integer, default: 3) The number of samples to use when exploring the x velocity space
   vy_samples: 10  # (integer, default: 10) The number of samples to use when exploring the y velocity space 
   vth_samples: 20 # (integer, default: 20) The number of samples to use when exploring the theta velocity space
-  controller_frequency: 2.0 # (double, default: 20.0) The frequency at which this controller will be called in Hz. Uses searchParam to read the parameter from parent namespaces if not set in the namespace of the controller. For use with move_base, this means that you only need to set its "controller_frequency" parameter and can safely leave this one unset
+  controller_frequency: 5.0 # (double, default: 20.0) The frequency at which this controller will be called in Hz. Uses searchParam to read the parameter from parent namespaces if not set in the namespace of the controller. For use with move_base, this means that you only need to set its "controller_frequency" parameter and can safely leave this one unset
   # penalize_negative_x: true  # (bool, default: true) Whether to penalize trajectories that have negative x velocities. 
 
 # Trajectory Scoring Parameters 

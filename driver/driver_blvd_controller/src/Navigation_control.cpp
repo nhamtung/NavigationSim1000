@@ -51,7 +51,7 @@ void cmd_velCallback(const geometry_msgs::Twist& msg)
 
   if(abs(W_r) < BLVD20KM_SPEED_MIN) W_r = 0;
   if(abs(W_l) < BLVD20KM_SPEED_MIN) W_l = 0;
-  ROS_INFO("Wheel left: %d  Wheel right: %d", W_l, W_r);
+  ROS_INFO("Navigation_control.cpp-54-Wheel left: %d  Wheel right: %d", W_l, W_r);
 } //cmd_velCallback
 
 int main(int argc, char **argv)

@@ -71,7 +71,7 @@ namespace move_base {
 
     ros::NodeHandle n("");
 
-    ////// Add by TungNV ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///// Add by TungNV ////////////////////////////////////////////////////////////////////////////////////////////////
     //Subscribe the topic /client_count
     mode_ = n.subscribe<std_msgs::Int32>("client_count", 1, boost::bind(&MoveBase::getMode, this, _1));
     ROS_INFO("move_base.cpp-82-Subscriber topic: /client_count");
@@ -324,6 +324,10 @@ namespace move_base {
     ROS_DEBUG_NAMED("move_base","In ROS goal callback, wrapping the PoseStamped in the action message and re-sending to the server.");
     move_base_msgs::MoveBaseActionGoal action_goal;
     action_goal.header.stamp = ros::Time::now();
+    std::stringstream ss;
+    ss << "goal-webapp-" << goal->header.stamp;
+    action_goal.goal_id.id = ss.str();
+    
     action_goal.goal.target_pose = *goal;
 
     action_goal_pub_.publish(action_goal);  //publish the action_goal, call myExecute()
@@ -920,6 +924,9 @@ namespace move_base {
     
     move_base_msgs::MoveBaseActionGoal action_goal;
     action_goal.header.stamp = ros::Time::now();
+    std::stringstream ss;
+    ss << "goal-webapp-" << goal->header.stamp;
+    action_goal.goal_id.id = ss.str();
     action_goal.goal.target_pose = *goal;
     ROS_INFO("move_base.cpp-900-Goal frame ID: %s", action_goal.goal.target_pose.header.frame_id.c_str());
     ROS_INFO("move_base.cpp-901-action_goal.x: %f", action_goal.goal.target_pose.pose.position.x);
