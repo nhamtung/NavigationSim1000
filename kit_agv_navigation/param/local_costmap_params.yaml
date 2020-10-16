@@ -6,9 +6,8 @@ local_costmap:
   # robot_base_frame: base_link
 
   # INFO: Tan so (Hz) update costmap
-  update_frequency: 10.0
-  # INFO: Tan so (Hz) publish hinh anh truc quan (publish visualization information)
-  publish_frequency: 10.0
+  update_frequency: 10.0    #(double, default: 5 Hz) Tan so update map (The frequency in Hz for the map to be updated)
+  publish_frequency: 10.0   #(double, default: 0 Hz) Tan so publish map (The frequency in Hz for the map to publish display information)
   transform_tolerance: 0.5
 
   # INFO: Lua chon co su dung map hay khong (map server)
