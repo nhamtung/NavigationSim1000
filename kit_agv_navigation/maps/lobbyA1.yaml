@@ -2,6 +2,7 @@
 #image: /home/robotics/TungNV/NavigationSim1000/catkin_ws/src/kit_agv_navigation/maps/lobbyA1.png
 #image: /home/nhamtung/TungNV/NavigationSim1000/catkin_ws/src/kit_agv_navigation/maps/lobbyA1.png
 image: lobbyA1.png
+#image: lobbyA1.jpg
 resolution: 0.1
 origin: [-10.05, -6.05, 0.0]
 negate: 0

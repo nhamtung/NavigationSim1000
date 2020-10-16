@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node pkg="plc_fx5uc" type="fx5uc_controller" name="PLC_control" output="screen">
+  </node>
+  
+
+</launch>

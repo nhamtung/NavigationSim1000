@@ -19,7 +19,7 @@ DWAPlannerROS:
   acc_lim_theta: 3.2  # (double, default: 3.2 rad/s2) .The rotational acceleration limit of the robot in radians/sec^2 
 
 # Goal Tolerance Parametes (m)
-  xy_goal_tolerance: 0.15  # (double, default: 0.10 m) Sai so vi tri cho phep tai vi tri dich (The tolerance in meters for the controller in the x & y distance when achieving a goal)
+  xy_goal_tolerance: 0.2  # (double, default: 0.10 m) Sai so vi tri cho phep tai vi tri dich (The tolerance in meters for the controller in the x & y distance when achieving a goal)
   yaw_goal_tolerance: 0.05       # (double, default: 0.05 m) Sai so goc cho phep tai vi tri dich (The tolerance in radians for the controller in yaw/rotation when achieving its goal)
   latch_xy_goal_tolerance: true # (bool, default: false) Neu vi tri robot ngoai sai so dich (xy), cho phep robot quay tai cho? (If goal tolerance is latched, if the robot ever reaches the goal xy location it will simply rotate in place, even if it ends up outside the goal tolerance while it is doing so)
 
@@ -30,7 +30,7 @@ DWAPlannerROS:
   vx_samples: 3  # (integer, default: 3) So luong mau su dung khi kham pha khong gian van toc theo truc x (The number of samples to use when exploring the x velocity space)
   vy_samples: 10  # (integer, default: 10) So luong mau su dung khi kham pha khong gian van toc theo truc y (The number of samples to use when exploring the y velocity space )
   vth_samples: 20 # (integer, default: 20) So luong mau su dung khi kham pha khong gian van toc quay (The number of samples to use when exploring the theta velocity space)
-  controller_frequency: 5.0 # (double, default: 20.0 Hz) Tan so ma bo dieu khien nay duoc goi (The frequency at which this controller will be called in Hz. Uses searchParam to read the parameter from parent namespaces if not set in the namespace of the controller. For use with move_base, this means that you only need to set its "controller_frequency" parameter and can safely leave this one unset)
+  controller_frequency: 10.0 # (double, default: 20.0 Hz) Tan so ma bo dieu khien nay duoc goi (The frequency at which this controller will be called in Hz. Uses searchParam to read the parameter from parent namespaces if not set in the namespace of the controller. For use with move_base, this means that you only need to set its "controller_frequency" parameter and can safely leave this one unset)
   # penalize_negative_x: true  # (bool, default: true) Whether to penalize trajectories that have negative x velocities. 
   use_dwa: true # (bool, default: true) Su dung cua so dong de han che toc do lay mau cua cua so nho (Use dynamic window approach to constrained sampling velocities to small window)
   restore_defaults: false # (bool, default: false) Lay lai cau hinh ban dau (Restore to the original configuration)

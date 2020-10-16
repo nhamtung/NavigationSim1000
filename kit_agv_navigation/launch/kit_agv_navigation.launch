@@ -9,8 +9,8 @@
   <arg name="host_ip"             default="192.168.1.255"/>
   <arg name="host_udp_port_front" default="6060" />
   <arg name="host_udp_port_back"  default="6061" />  
-  <arg name="angle_start_front"   default="-2.1" />
-  <arg name="angle_end_front"     default="2.1" />
+  <arg name="angle_start_front"   default="-2" />
+  <arg name="angle_end_front"     default="2" />
   <arg name="angle_start_back"    default="-2.2" />
   <arg name="angle_end_back"      default="2.2" />
   <arg name="frame_id_front"      default="base_laser_front"/>
@@ -63,6 +63,10 @@
   <arg name="move_forward_only" default="false"/>
   <include file="$(find kit_agv_navigation)/launch/move_base.launch">
     <arg name="move_forward_only" value="$(arg move_forward_only)"/>
+  </include>
+
+  <include file="$(find linefolowing)/launch/linefolowingRun.launch">
+    <arg name="yaml" value="consept_rb.yaml"/>
   </include>
 
   <!-- Laser Odom -->

@@ -28,4 +28,4 @@ uint8 STATUS_LOST            = 9   # An action client can determine that a goal 
                             #    sent over the wire by an action server
 
 #Allow for the user to associate a string with GoalStatus for debugging
-string action_id
+string action_id 
