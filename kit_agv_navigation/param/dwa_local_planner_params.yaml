@@ -24,7 +24,7 @@ DWAPlannerROS:
 
 # Goal Tolerance Parametes (m)
   # xy_goal_tolerance: 0.05  # (double, default: 0.10) The tolerance in meters for the controller in the x & y distance when achieving a goal
-  xy_goal_tolerance: 0.1  # (double, default: 0.10) The tolerance in meters for the controller in the x & y distance when achieving a goal
+  xy_goal_tolerance: 0.15  # (double, default: 0.10) The tolerance in meters for the controller in the x & y distance when achieving a goal
   # yaw_goal_tolerance: 0.17       # (double, default: 0.05) The tolerance in radians for the controller in yaw/rotation when achieving its goal 
   yaw_goal_tolerance: 0.1
   # latch_xy_goal_tolerance: false # (bool, default: false) If goal tolerance is latched, if the robot ever reaches the goal xy location it will simply rotate in place, even if it ends up outside the goal tolerance while it is doing so
