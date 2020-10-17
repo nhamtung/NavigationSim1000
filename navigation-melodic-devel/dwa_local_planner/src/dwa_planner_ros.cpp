@@ -225,8 +225,8 @@ namespace dwa_local_planner {
     cmd_vel.linear.x = drive_cmds.pose.position.x;
     cmd_vel.linear.y = drive_cmds.pose.position.y;
     cmd_vel.angular.z = tf2::getYaw(drive_cmds.pose.orientation);
-    ROS_WARN("dwa_planner_ros.cpp-224-cmd_vel.linear.x: %f", cmd_vel.linear.x);
-    ROS_WARN("dwa_planner_ros.cpp-225-cmd_vel.angular.z: %f", cmd_vel.angular.z);
+    // ROS_WARN("dwa_planner_ros.cpp-224-cmd_vel.linear.x: %f", cmd_vel.linear.x);
+    // ROS_WARN("dwa_planner_ros.cpp-225-cmd_vel.angular.z: %f", cmd_vel.angular.z);
 
     //if we cannot move... tell someone
     std::vector<geometry_msgs::PoseStamped> local_plan;
@@ -310,7 +310,7 @@ namespace dwa_local_planner {
       if (isOk) {
         publishGlobalPlan(transformed_plan);
       } else {   
-        ROS_WARN("dwa_planner_ros.cpp-308-DWA planner failed to produce path.");
+        ROS_ERROR("dwa_planner_ros.cpp-308-DWA planner failed to produce path.");
         std::vector<geometry_msgs::PoseStamped> empty_plan;
         publishGlobalPlan(empty_plan);
       }

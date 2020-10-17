@@ -33,8 +33,8 @@ bool Islinegood(uint8_t data);
 bool IsSensorflipped(uint8_t data);
 bool CheckPolarity(uint8_t data);
 bool Checkreadingcode(uint8_t data);
-void Gacceleration(const float step);
-void Deceleration(const float step);
+void Gacceleration(float * present_speed, const float step);
+void Deceleration(float * present_speed, const float step);
 
 /* CallBack Subcriber */
 #define Pi 3.1415926535
@@ -171,7 +171,7 @@ void mlsCallback(const linefolowing::MLS_Measurement& msg)
 				else if(msg.position[0] < 0)
 				{
 					present_speed_setting = 0.35;
-					ROS_INFO("Vung 1, giam toc, dir = %d", dir);	 	
+					ROS_INFO("Vung 0, giam toc, dir = %d", dir);	 	
 				}
 			}
 		}else present_speed_setting = 0;
@@ -274,9 +274,7 @@ int main(int argc, char **argv)
 
 	/* Subscriber position line */
 	ros::Subscriber mls = n.subscribe(topicSubscribe, 20,mlsCallback);
-	ros::Subscriber action = n.subscribe("agv_action", 20,actionCallback);
-
-	 
+	ros::Subscriber action = n.subscribe("agv_action", 20,actionCallback);	 
 	/* clock */
 	clock_t begin_time = clock();
 
@@ -285,12 +283,16 @@ int main(int argc, char **argv)
 		/* This is a message object. You stuff it with data, and then publish it. */
 	    if(int8_t(speed_setting/abs(speed_setting)) == dir && direct != 0 && direct == dir)
 		{
-			if(float(clock()-begin_time)/CLOCKS_PER_SEC*1000  >= 1) // 0 ms
+			if(float(clock()-begin_time)/CLOCKS_PER_SEC*1000  >= 1) // 1 ms
 			{
 				if(present_speed != present_speed_setting)
 				{
-					if(present_speed < present_speed_setting) Gacceleration(0.009);
-						else if(present_speed > present_speed_setting) Deceleration(0.02);
+					// if(present_speed_setting > present_speed) {
+					// 	Gacceleration(&present_speed, 0.01);
+					// }else if(present_speed_setting < present_speed) {
+					// 	Deceleration(&present_speed, 0.01);
+					// }
+
 				} else present_speed = present_speed_setting;
 				begin_time = clock();
 				//ROS_INFO("Line %d present_speed = %f",ucIndex, present_speed);
@@ -309,11 +311,9 @@ int main(int argc, char **argv)
 			ROS_INFO("Banh trai = %d Banh phai = %d",robot.wheel_letf, robot.wheel_right);
 			speedwheel.publish(robot);
 		}
-
 		loop_rate.sleep();
 		ros::spinOnce();
-	}
-	
+	}	
 	return 0;
 }
 
@@ -378,14 +378,14 @@ bool string_compare(char *str1, const char *str2)
 	
 }
 
-void Gacceleration(const float step)
+void Gacceleration(float * present_speed,const float step)
 {
-	if(present_speed >= present_speed_setting) present_speed = present_speed_setting;
-	else present_speed += step;
+	// if(present_speed >= present_speed_setting) present_speed = present_speed_setting;
+	// present_speed += step;
 }
 
-void Deceleration(const float step)
+void Deceleration(float * present_speed, const float step)
 {
-	if(present_speed >= present_speed_setting) present_speed = present_speed_setting;
-	else present_speed -= step;
+	// if(present_speed >= present_speed_setting) present_speed = present_speed_setting;
+	// present_speed -= step;
 }

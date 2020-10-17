@@ -264,7 +264,7 @@ bool LatchedStopRotateController::computeVelocityCommandsStopRotate(geometry_msg
           sim_period,
           limits,
           obstacle_check)) {
-        ROS_INFO("Error when rotating.");
+        ROS_ERROR("latched_stop_rotate_controller.cpp-267-Error when rotating.");
         return false;
       }
       ROS_DEBUG("Rotating...");

@@ -112,9 +112,9 @@ namespace carrot_planner {
     }
 
     const double start_yaw = tf2::getYaw(start.pose.orientation);    
-    ROS_INFO("carrot_planner.cpp-112-start_yaw: %.3f (rad)", start_yaw);
+    // ROS_INFO("carrot_planner.cpp-112-start_yaw: %.3f (rad)", start_yaw);
     const double goal_yaw = tf2::getYaw(goal.pose.orientation);    
-    ROS_INFO("carrot_planner.cpp-114-goal_yaw: %.3f (rad)", goal_yaw);
+    // ROS_INFO("carrot_planner.cpp-114-goal_yaw: %.3f (rad)", goal_yaw);
 
     // const double start_yaw = GetYaw(start.pose.orientation.x, start.pose.orientation.y, start.pose.orientation.z, start.pose.orientation.w);
     // ROS_INFO("carrot_planner.cpp-117-start_yaw: %.3f (rad)", start_yaw);
@@ -128,11 +128,11 @@ namespace carrot_planner {
     double start_y = start.pose.position.y;
 
     double diff_x = goal_x - start_x;
-    ROS_INFO("carrot_planner.cpp-128-diff_x: %.3f (m)", diff_x);
+    // ROS_INFO("carrot_planner.cpp-128-diff_x: %.3f (m)", diff_x);
     double diff_y = goal_y - start_y;
-    ROS_INFO("carrot_planner.cpp-130-diff_y: %.3f (m)", diff_y);
+    // ROS_INFO("carrot_planner.cpp-130-diff_y: %.3f (m)", diff_y);
     double diff_yaw = angles::normalize_angle(goal_yaw-start_yaw);
-    ROS_INFO("carrot_planner.cpp-132-diff_yaw: %.3f (rad)", diff_yaw);
+    // ROS_INFO("carrot_planner.cpp-132-diff_yaw: %.3f (rad)", diff_yaw);
 
     double target_x = goal_x;
     double target_y = goal_y;

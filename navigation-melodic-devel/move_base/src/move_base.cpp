@@ -522,6 +522,7 @@ namespace move_base {
 
   MoveBase::~MoveBase(){
     ROS_INFO("move_base.cpp-484-~MoveBase");
+    publishZeroVelocity();
     recovery_behaviors_.clear();
 
     delete dsrv_;
@@ -581,7 +582,7 @@ namespace move_base {
   }
 
   void MoveBase::publishZeroVelocity(){
-    ROS_INFO("move_base.cpp-544-publishZeroVelocity: STOP ROBOT!");
+    ROS_WARN("move_base.cpp-544-publishZeroVelocity: STOP ROBOT!");
     geometry_msgs::Twist cmd_vel;
     cmd_vel.linear.x = 0.0;
     cmd_vel.linear.y = 0.0;
@@ -1306,7 +1307,7 @@ namespace move_base {
 
   bool MoveBase::executeCycle(geometry_msgs::PoseStamped& goal, std::vector<geometry_msgs::PoseStamped>& global_plan){
     ROS_INFO("move_base.cpp-1189-executeCycle()");
-    ROS_INFO("move_base.cpp-1190-goal.x=%.2f, goal.y=%.2f, goal.z=%.2f, goal.w=%.2f", goal.pose.position.x, goal.pose.position.y, goal.pose.orientation.z, goal.pose.orientation.w);
+    // ROS_INFO("move_base.cpp-1190-goal.x=%.2f, goal.y=%.2f, goal.z=%.2f, goal.w=%.2f", goal.pose.position.x, goal.pose.position.y, goal.pose.orientation.z, goal.pose.orientation.w);
     boost::recursive_mutex::scoped_lock ecl(configuration_mutex_);
     //we need to be able to publish velocity commands
     geometry_msgs::Twist cmd_vel;
@@ -1324,7 +1325,7 @@ namespace move_base {
     //check to see if we've moved far enough to reset our oscillation timeout
     if(distance(current_position, oscillation_pose_) >= oscillation_distance_)
     {
-      ROS_ERROR("move_base.cpp-1206-distance = %f > oscillation_distance_ = %f", distance(current_position, oscillation_pose_), oscillation_distance_);
+      ROS_ERROR("move_base.cpp-1329-distance = %f > oscillation_distance_ = %f", distance(current_position, oscillation_pose_), oscillation_distance_);
       last_oscillation_reset_ = ros::Time::now();
       oscillation_pose_ = current_position;
 
@@ -1338,7 +1339,7 @@ namespace move_base {
     //check that the observation buffers for the costmap are current, we don't want to drive blind
     if(!controller_costmap_ros_->isCurrent()){
       ROS_INFO("move_base.cpp-1181-[%s]:Sensor data is out of date, we're not going to allow commanding of the base for safety",ros::this_node::getName().c_str());
-      publishZeroVelocity();
+      // publishZeroVelocity();
       return false;
     }
 
@@ -1713,10 +1714,10 @@ namespace move_base {
       return false;
     }
 
-    ROS_INFO("move_base.cpp-1609-global_pose.x: %.3f", global_pose.pose.position.x);
-    ROS_INFO("move_base.cpp-1610-global_pose.y: %.3f", global_pose.pose.position.y);
-    ROS_INFO("move_base.cpp-1611-global_pose.z: %.3f", global_pose.pose.orientation.z);
-    ROS_INFO("move_base.cpp-1612-global_pose.w: %.3f", global_pose.pose.orientation.w);
+    // ROS_INFO("move_base.cpp-1609-global_pose.x: %.3f", global_pose.pose.position.x);
+    // ROS_INFO("move_base.cpp-1610-global_pose.y: %.3f", global_pose.pose.position.y);
+    // ROS_INFO("move_base.cpp-1611-global_pose.z: %.3f", global_pose.pose.orientation.z);
+    // ROS_INFO("move_base.cpp-1612-global_pose.w: %.3f", global_pose.pose.orientation.w);
 
 
     return true;

@@ -151,7 +151,7 @@ bool Buffer::canTransform(const std::string& target_frame, const ros::Time& targ
                      const std::string& source_frame, const ros::Time& source_time,
                      const std::string& fixed_frame, const ros::Duration timeout, std::string* errstr) const
 {
-  ROS_INFO("buffer.cpp-153-canTransform");
+  // ROS_INFO("buffer.cpp-153-canTransform");
   // Clear the errstr before populating it if it's valid.
   if (errstr)
     {
