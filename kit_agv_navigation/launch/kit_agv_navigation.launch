@@ -65,8 +65,11 @@
     <arg name="move_forward_only" value="$(arg move_forward_only)"/>
   </include>
 
-  <include file="$(find linefolowing)/launch/linefolowingRun.launch">
+  <!-- <include file="$(find linefolowing)/launch/linefolowingRun.launch">
     <arg name="yaml" value="consept_rb.yaml"/>
+  </include> -->
+
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
   </include>
 
   <!-- Laser Odom -->

@@ -33,8 +33,8 @@ bool Islinegood(uint8_t data);
 bool IsSensorflipped(uint8_t data);
 bool CheckPolarity(uint8_t data);
 bool Checkreadingcode(uint8_t data);
-void Gacceleration(float * present_speed, const float step);
-void Deceleration(float * present_speed, const float step);
+void Gacceleration(float& present_speed, const float step);
+void Deceleration(float& present_speed, const float step);
 
 /* CallBack Subcriber */
 #define Pi 3.1415926535
@@ -46,14 +46,15 @@ float present_speed_setting; 	// percent speed setting
 float speed_setting; 			// speed max when percent speed = 100%  (m/s)
 float L; 						// khoang cach 2 banh
 float Lm; 						// Khoang cach  tu tam truc banh den tam do line 
-float R; 						//wheel radius (in meters per radian)
+float R; 						// wheel radius (in meters per radian)
 float v_max_wheel; 				// speed maximum of moter behind gear
 float v_min_wheel; 				// speed maximum of moter behind gear
 float Lt;						// Dường kính vòng cua
 float V;  						// forward velocity (ie meters per second)
 float K;  						// He so chuyen banh răng
-int W_l, W_r; 				// speed befor gear]
+int W_l, W_r; 				    // speed befor gear
 
+bool isCharginIn = false;
 bool line_good;
 uint8_t track_level;
 uint8_t error_register;
@@ -73,6 +74,7 @@ void actionCallback(const linefolowing::agv_action& msg)
       case 2:
         break;
       case 3:
+	  		isCharginIn = true;
 			direct = -1;	  
         break;
       case 4:
@@ -159,6 +161,7 @@ void mlsCallback(const linefolowing::MLS_Measurement& msg)
 			if(msg.position[2] > 0)
 			{	
 				present_speed_setting = 0;
+				isCharginIn = false;
 				ROS_INFO("Vung 3, stop  dir = %d", dir);	
 			}
 			else if(msg.position[2] <= 0)
@@ -280,39 +283,41 @@ int main(int argc, char **argv)
 
 	while (ros::ok())
 	{
-		/* This is a message object. You stuff it with data, and then publish it. */
-	    if(int8_t(speed_setting/abs(speed_setting)) == dir && direct != 0 && direct == dir)
-		{
-			if(float(clock()-begin_time)/CLOCKS_PER_SEC*1000  >= 1) // 1 ms
+		// ROS_INFO("isCharginIn: %d", isCharginIn);
+		if (isCharginIn){
+			/* This is a message object. You stuff it with data, and then publish it. */
+			if(int8_t(speed_setting/abs(speed_setting)) == dir && direct != 0 && direct == dir )
 			{
-				if(present_speed != present_speed_setting)
+				if(float(clock()-begin_time)/CLOCKS_PER_SEC*1000  >= 1) // 1 ms
 				{
-					// if(present_speed_setting > present_speed) {
-					// 	Gacceleration(&present_speed, 0.01);
-					// }else if(present_speed_setting < present_speed) {
-					// 	Deceleration(&present_speed, 0.01);
-					// }
-
-				} else present_speed = present_speed_setting;
-				begin_time = clock();
-				//ROS_INFO("Line %d present_speed = %f",ucIndex, present_speed);
-			}
-			if(line_good == true)
-			{
-				robot.wheel_letf  = W_l*dir;
-				robot.wheel_right = W_r*dir*(-1);
-				if(track_level <= 3 && track_level > 0) ROS_WARN("From MLS%d: track too weak!!",ucIndex);
-			}else 
-				{
-				  	ROS_ERROR("From MLS%d: no track!!", ucIndex);
-				    robot.wheel_letf = 0;
-				    robot.wheel_right = 0;
+					if(present_speed != present_speed_setting)
+					{
+						if(present_speed_setting > present_speed) {
+							Gacceleration(present_speed, 0.01);
+						}else if(present_speed_setting < present_speed) {
+							Deceleration(present_speed, 0.01);
+						}
+					} 
+					begin_time = clock();
+					//ROS_INFO("Line %d present_speed = %f",ucIndex, present_speed);
 				}
-			ROS_INFO("Banh trai = %d Banh phai = %d",robot.wheel_letf, robot.wheel_right);
-			speedwheel.publish(robot);
+				if(line_good == true)
+				{
+					robot.wheel_letf  = W_l*dir;
+					robot.wheel_right = W_r*dir*(-1);
+					if(track_level <= 3 && track_level > 0) ROS_WARN("From MLS%d: track too weak!!",ucIndex);
+				}else 
+					{
+						ROS_ERROR("From MLS%d: no track!!", ucIndex);
+						robot.wheel_letf = 0;
+						robot.wheel_right = 0;
+					}
+				ROS_INFO("Banh trai = %d Banh phai = %d",robot.wheel_letf, robot.wheel_right);
+				speedwheel.publish(robot);
+			}
+			loop_rate.sleep();
+			ros::spinOnce();
 		}
-		loop_rate.sleep();
-		ros::spinOnce();
 	}	
 	return 0;
 }
@@ -378,14 +383,12 @@ bool string_compare(char *str1, const char *str2)
 	
 }
 
-void Gacceleration(float * present_speed,const float step)
+void Gacceleration(float& present_speed,const float step)
 {
-	// if(present_speed >= present_speed_setting) present_speed = present_speed_setting;
-	// present_speed += step;
+	present_speed += step;
 }
 
-void Deceleration(float * present_speed, const float step)
+void Deceleration(float& present_speed, const float step)
 {
-	// if(present_speed >= present_speed_setting) present_speed = present_speed_setting;
-	// present_speed -= step;
+	present_speed -= step;
 }

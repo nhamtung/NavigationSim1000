@@ -16,15 +16,7 @@ using namespace std;
 #define WHITE  7
 
 
-void drivermotor_cmdcallback(const diagnostic_msgs::DiagnosticStatus& status)
-{
 
-}
-
-void mlse_cmdcallback(const diagnostic_msgs::DiagnosticStatus& status)
-{
-
-}
 
 int main(int argc, char **argv)
 {
@@ -50,39 +42,43 @@ int main(int argc, char **argv)
     diagnostic_msgs::KeyValue Dock;
     diagnostic_msgs::KeyValue Xilanh;
 
-    bool bitM_echo[10];
-    bool m1m2m3[3] = {OFF,OFF,OFF};
+    PLC.name = "PLC-Fx5UC";
+	PLC.hardware_id = "192.168.1.51:502";
+
+    bool bitM_echo[20];
+    bool bitM_pub[20] = {OFF,OFF,OFF};
     while(ros::ok())
     {   
-        fx5uc->modbus_read_coils(Mbit, 10,bitM_echo); 
+        fx5uc->modbus_read_coils(Mbit, 20,bitM_echo); 
         //ROS_INFO("M0 = %d M5 = %d M6 = %d M7 = %d",bitM[0],bitM[5],bitM[6],bitM[7]);  
         if(bitM_echo[0] == ON)// Nếu M0 on 
         {
             if(bitM_echo[5] == ON){
                 device.D[1] = RED;
-                m1m2m3[0] = ON;m1m2m3[1] = ON;m1m2m3[2] = OFF;
+                bitM_pub[0] = ON;bitM_pub[1] = ON;bitM_pub[2] = OFF;
             }
 
             else if(bitM_echo[6] == ON){
                 device.D[1] = YELLOW;
-                m1m2m3[0] = ON;m1m2m3[1] = ON;m1m2m3[2] = OFF;
+                bitM_pub[0] = ON;bitM_pub[1] = ON;bitM_pub[2] = OFF;
             }
             else if(bitM_echo[7]== ON){
                 device.D[1] = YELLOW;
-                m1m2m3[0] = ON;m1m2m3[1] = OFF;m1m2m3[2] = OFF;
+                bitM_pub[0] = ON;bitM_pub[1] = OFF;bitM_pub[2] = OFF;
             }
             else if(bitM_echo[8]== ON){
-            device.D[1] = GREEN;
-            m1m2m3[0] = ON;m1m2m3[1] = OFF;m1m2m3[2] = OFF;
+                device.D[1] = GREEN;
+                bitM_pub[0] = ON;bitM_pub[1] = OFF;bitM_pub[2] = OFF;
             }
             else if(bitM_echo[9]== ON){
-            device.D[1] = OCEAN;
-            m1m2m3[0] = ON;m1m2m3[1] = OFF;m1m2m3[2] = OFF;
+                device.D[1] = OCEAN;
+                bitM_pub[0] = ON;bitM_pub[1] = OFF;bitM_pub[2] = OFF;
             }
-            fx5uc->modbus_write_coils(Mbit+1, 3,m1m2m3); 
+
+            
+            fx5uc->modbus_write_coils(Mbit+1, 3,bitM_pub); 
             fx5uc->modbus_write_register(0, device.D[1]); 
         } else ROS_INFO("fx5uc_controller.cpp-80-not listen"); 
-
 
         loop_rate.sleep();
         ros::spinOnce();
