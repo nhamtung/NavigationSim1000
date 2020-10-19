@@ -80,7 +80,7 @@ void cmd_velCallback(const geometry_msgs::Twist& msg)
 
   if(abs(W_r) < BLVD20KM_SPEED_MIN) W_r = 0;
   if(abs(W_l) < BLVD20KM_SPEED_MIN) W_l = 0;
-  ROS_INFO("Wheel left: %d  Wheel right: %d", W_l, W_r);
+  ROS_INFO("Navigation_control.cpp-83- Wheel left: %d  Wheel right: %d", W_l, W_r);
 } //cmd_velCallback
 
 int main(int argc, char **argv)
@@ -112,6 +112,7 @@ int main(int argc, char **argv)
     robot.wheel_letf = W_l;
     robot.wheel_right = -W_r;
     Navigation_control.publish(robot);
+    // ROS_INFO("Navigation_control.cpp-115- Publish to driver - Wheel left: %d  Wheel right: %d", robot.wheel_letf, robot.wheel_right);
   }
     // if((clock() - start)/CLOCKS_PER_SEC >= timeoutMs) 
     //     W_r = W_l= 0;

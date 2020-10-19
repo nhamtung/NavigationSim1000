@@ -174,7 +174,7 @@ namespace base_local_planner {
   bool getGoalPose(const tf2_ros::Buffer& tf,
       const std::vector<geometry_msgs::PoseStamped>& global_plan,
       const std::string& global_frame, geometry_msgs::PoseStamped &goal_pose) {
-    ROS_INFO("goal_functions.cpp-177-getGoalPose()");
+    // ROS_INFO("goal_functions.cpp-177-getGoalPose()");
     if (global_plan.empty())
     {
       ROS_ERROR("goal_functions.cpp-180-Received plan with zero length");
@@ -215,6 +215,7 @@ namespace base_local_planner {
       const nav_msgs::Odometry& base_odom,
       double rot_stopped_vel, double trans_stopped_vel,
       double xy_goal_tolerance, double yaw_goal_tolerance){
+    ROS_INFO("goal_functions.cpp-218-isGoalReached()");
 
     //we assume the global goal is the last point in the global plan
     geometry_msgs::PoseStamped goal_pose;
@@ -223,6 +224,9 @@ namespace base_local_planner {
     double goal_x = goal_pose.pose.position.x;
     double goal_y = goal_pose.pose.position.y;
     double goal_th = tf2::getYaw(goal_pose.pose.orientation);
+    ROS_INFO("goal_functions.cpp-227-goal_x: %f", goal_x);
+    ROS_INFO("goal_functions.cpp-228-goal_y: %f", goal_y);
+    ROS_INFO("goal_functions.cpp-229-goal_yaw: %f", goal_th);
 
     //check to see if we've reached the goal position
     if(getGoalPositionDistance(global_pose, goal_x, goal_y) <= xy_goal_tolerance) {

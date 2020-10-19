@@ -49,8 +49,9 @@
   
   <!-- Map server -->
   <!-- <arg name="map_file" default="$(find kit_agv_navigation)/maps/map708_SIM.yaml"/> -->
-  <!-- <arg name="map_file" default="$(find kit_agv_navigation)/maps/map709_SIM.yaml"/> -->
-  <arg name="map_file" default="$(find kit_agv_navigation)/maps/lobbyA1.yaml"/>
+  <!-- <arg name="map_file" default="$(find kit_agv_navigation)/maps/map709_SIM.yaml"/>  -->
+  <!-- <arg name="map_file" default="$(find kit_agv_navigation)/maps/lobbyA1.yaml"/> -->
+  <arg name="map_file" default="$(find kit_agv_navigation)/maps/mapBuild.yaml"/>
   <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
 
   <!-- sick_lidar_localization -->
@@ -86,8 +87,8 @@
   </include>
 
   <!-- rviz -->
-  <arg name="open_rviz" default="true"/>
-  <!-- <arg name="open_rviz" default="false"/> -->
+  <!-- <arg name="open_rviz" default="true"/> -->
+  <arg name="open_rviz" default="false"/>
   <group if="$(arg open_rviz)"> 
     <node pkg="rviz" type="rviz" name="rviz" required="true"
           args="-d $(find kit_agv_navigation)/rviz/kit_agv_navigation.rviz"/>

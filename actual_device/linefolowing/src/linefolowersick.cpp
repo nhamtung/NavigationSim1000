@@ -284,7 +284,7 @@ int main(int argc, char **argv)
 	while (ros::ok())
 	{
 		// ROS_INFO("isCharginIn: %d", isCharginIn);
-		if (isCharginIn){
+		// if (!isCharginIn){
 			/* This is a message object. You stuff it with data, and then publish it. */
 			if(int8_t(speed_setting/abs(speed_setting)) == dir && direct != 0 && direct == dir )
 			{
@@ -317,7 +317,7 @@ int main(int argc, char **argv)
 			}
 			loop_rate.sleep();
 			ros::spinOnce();
-		}
+		// }
 	}	
 	return 0;
 }

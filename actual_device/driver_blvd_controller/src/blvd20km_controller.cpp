@@ -103,8 +103,8 @@ int main(int argc, char **argv)
 		{
 				writeResetAlarm(ID); 
 				writeSpeedControlMode(ID,BLVD02KM_SPEED_MODE_USE_DIGITALS);
-				writeAcceleration(ID,5);
-				writeDeceleration(ID,15);
+				writeAcceleration(ID,2);
+				writeDeceleration(ID,2);
 				writeSpeed(ID,BLVD20KM_SPEED_MIN);
 				writeStop(ID);
 				clearAlarmRecords(ID); 
