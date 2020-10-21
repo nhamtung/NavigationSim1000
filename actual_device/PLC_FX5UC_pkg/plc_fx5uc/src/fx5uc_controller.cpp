@@ -4,6 +4,7 @@
 #include <diagnostic_msgs/DiagnosticArray.h>
 #include <diagnostic_msgs/DiagnosticStatus.h>
 #include <ros/ros.h>
+
 using namespace std;
 
 #define NO_CL  0
@@ -34,7 +35,7 @@ int main(int argc, char **argv)
     ros::Rate loop_rate(20);
     /* Publisher */
     ros::Publisher cmd_PLC;
-     cmd_PLC = nh.advertise<diagnostic_msgs::DiagnosticStatus>("PLC_infomation", 20);
+    cmd_PLC = nh.advertise<diagnostic_msgs::DiagnosticStatus>("PLC_infomation", 20);
 
     diagnostic_msgs::DiagnosticArray dir_array;
 	diagnostic_msgs::DiagnosticStatus PLC;
@@ -49,36 +50,53 @@ int main(int argc, char **argv)
     bool bitM_pub[20] = {OFF,OFF,OFF};
     while(ros::ok())
     {   
-        fx5uc->modbus_read_coils(Mbit, 20,bitM_echo); 
+        fx5uc->modbus_read_coils(Mbit, 20, bitM_echo); 
         //ROS_INFO("M0 = %d M5 = %d M6 = %d M7 = %d",bitM[0],bitM[5],bitM[6],bitM[7]);  
         if(bitM_echo[0] == ON)// Nếu M0 on 
         {
             if(bitM_echo[5] == ON){
                 device.D[1] = RED;
-                bitM_pub[0] = ON;bitM_pub[1] = ON;bitM_pub[2] = OFF;
+                bitM_pub[1] = ON;bitM_pub[2] = ON;bitM_pub[3] = OFF;
             }
 
             else if(bitM_echo[6] == ON){
                 device.D[1] = YELLOW;
-                bitM_pub[0] = ON;bitM_pub[1] = ON;bitM_pub[2] = OFF;
+                bitM_pub[1] = ON;bitM_pub[2] = ON;bitM_pub[3] = OFF;
             }
             else if(bitM_echo[7]== ON){
                 device.D[1] = YELLOW;
-                bitM_pub[0] = ON;bitM_pub[1] = OFF;bitM_pub[2] = OFF;
+                bitM_pub[1] = ON;bitM_pub[2] = OFF;bitM_pub[3] = OFF;
             }
             else if(bitM_echo[8]== ON){
                 device.D[1] = GREEN;
-                bitM_pub[0] = ON;bitM_pub[1] = OFF;bitM_pub[2] = OFF;
+                bitM_pub[1] = ON;bitM_pub[2] = OFF;bitM_pub[3] = OFF;
             }
             else if(bitM_echo[9]== ON){
                 device.D[1] = OCEAN;
-                bitM_pub[0] = ON;bitM_pub[1] = OFF;bitM_pub[2] = OFF;
+                bitM_pub[1] = ON;bitM_pub[2] = OFF;bitM_pub[3] = OFF;
+            }
+            bitM_pub[16] = ON;  // nang xilanh
+            // if(bitM_echo[12] == OFF) bitM_pub[12] = ON;  // LIFT_UP
+            if(bitM_echo[14] == OFF) bitM_pub[14] = ON;  // LIFT_DOWN
+            
+            ///// Add by DuNV
+            // ROS_INFO("fx5uc_controller.cpp-89- bitM_echo[20]: %d", bitM_echo[20]);
+            if(bitM_echo[20] == ON) //sensor charging AGV
+            {
+                bitM_pub[18] = ON;   // send to PLC
+                ROS_INFO("fx5uc_controller.cpp-89- Shutdown the IPC");
+                system("sudo shutdown now");
             }
 
-            
-            fx5uc->modbus_write_coils(Mbit+1, 3,bitM_pub); 
+            fx5uc->modbus_write_coils(Mbit, 20, bitM_pub); 
             fx5uc->modbus_write_register(0, device.D[1]); 
         } else ROS_INFO("fx5uc_controller.cpp-80-not listen"); 
+
+
+
+
+        system("sudo shutdown now");
+
 
         loop_rate.sleep();
         ros::spinOnce();
