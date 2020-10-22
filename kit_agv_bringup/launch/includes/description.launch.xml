@@ -1,4 +1,4 @@
 <launch>
   <arg name="urdf_file" default="" />
-  <param name="robot_description" command="$(arg urdf_file)" />
+  <!-- <param name="robot_description" command="$(arg urdf_file)" /> -->
 </launch>

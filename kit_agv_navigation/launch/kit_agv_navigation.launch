@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <launch>
   <!-- Arguments -->
-
   <arg name="topic_front"         default="/sick_safetyscanners_front"/>
   <arg name="topic_back"          default="/sick_safetyscanners_back"/>
   <arg name="sensor_ip_front"     default="192.168.1.12"/>
@@ -11,8 +10,8 @@
   <arg name="host_udp_port_back"  default="6061" />  
   <arg name="angle_start_front"   default="-2" />
   <arg name="angle_end_front"     default="2" />
-  <arg name="angle_start_back"    default="-2.2" />
-  <arg name="angle_end_back"      default="2.2" />
+  <arg name="angle_start_back"    default="-2" />
+  <arg name="angle_end_back"      default="2" />
   <arg name="frame_id_front"      default="base_laser_front"/>
   <arg name="frame_id_back"       default="base_laser_back"/>
 
@@ -43,9 +42,16 @@
 
   <!-- agv_v1, kit_agv -->
   <arg name="urdf_file" default="$(find xacro)/xacro --inorder '$(find kit_agv_description)/urdf/agv_v1.urdf.xacro'" />
-  <include file="$(find kit_agv_bringup)/launch/kit_agv_remote.launch">
+  <param name="robot_description" command="$(arg urdf_file)" />
+  <!-- <include file="$(find kit_agv_bringup)/launch/includes/description.launch.xml">
+     <arg name="urdf_file" value="$(arg urdf_file)"/>
+  </include> -->
+  <!-- <include file="$(find kit_agv_bringup)/launch/kit_agv_remote.launch">
      <arg name="urdf_file" value="$(arg urdf_file)" />
-  </include>
+  </include> -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="50.0" />
+  </node>
   
   <!-- Map server -->
   <!-- <arg name="map_file" default="$(find kit_agv_navigation)/maps/map708_SIM.yaml"/> -->
@@ -70,8 +76,7 @@
     <arg name="yaml" value="consept_rb.yaml"/>
   </include> -->
 
-  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
-  </include>
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"></include>
 
   <!-- Laser Odom -->
   <!-- <node pkg="laser_scan_matcher" type="laser_scan_matcher_node" name="laser_scan_matcher_node" output="screen"/> -->
@@ -79,12 +84,10 @@
   <node pkg="joint_state_publisher" type="joint_state_publisher" respawn="false" name="joint_state_publisher" output="screen"/>
 
   <!-- Motor Driver -->
-  <include file="$(find driver_blvd_controller)/launch/agvrun.launch">
-  </include>
+  <include file="$(find driver_blvd_controller)/launch/agvrun.launch"></include>
 
   <!-- PLC -->
-  <include file="$(find plc_fx5uc)/launch/plc.launch">
-  </include>
+  <!-- <include file="$(find plc_fx5uc)/launch/plc.launch"></include> -->
 
   <!-- rviz -->
   <!-- <arg name="open_rviz" default="true"/> -->

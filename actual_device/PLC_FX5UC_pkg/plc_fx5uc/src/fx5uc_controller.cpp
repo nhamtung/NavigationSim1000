@@ -16,9 +16,6 @@ using namespace std;
 #define OCEAN  6
 #define WHITE  7
 
-
-
-
 int main(int argc, char **argv)
 {
     /* create a modbus object */
@@ -46,12 +43,13 @@ int main(int argc, char **argv)
     PLC.name = "PLC-Fx5UC";
 	PLC.hardware_id = "192.168.1.51:502";
 
-    bool bitM_echo[20];
-    bool bitM_pub[20] = {OFF,OFF,OFF};
+    bool bitM_echo[100];
+    bool bitM_pub[100];
+
     while(ros::ok())
     {   
-        fx5uc->modbus_read_coils(Mbit, 20, bitM_echo); 
-        //ROS_INFO("M0 = %d M5 = %d M6 = %d M7 = %d",bitM[0],bitM[5],bitM[6],bitM[7]);  
+        fx5uc->modbus_read_coils(Mbit, 100, bitM_echo);
+        fx5uc->modbus_read_coils(PORT1, 7,device.y1);
         if(bitM_echo[0] == ON)// Nếu M0 on 
         {
             if(bitM_echo[5] == ON){
@@ -79,24 +77,20 @@ int main(int argc, char **argv)
             // if(bitM_echo[12] == OFF) bitM_pub[12] = ON;  // LIFT_UP
             if(bitM_echo[14] == OFF) bitM_pub[14] = ON;  // LIFT_DOWN
             
-            ///// Add by DuNV
-            // ROS_INFO("fx5uc_controller.cpp-89- bitM_echo[20]: %d", bitM_echo[20]);
+        //     ///// Add by DuNV
+        //     // ROS_INFO("fx5uc_controller.cpp-89- bitM_echo[20]: %d", bitM_echo[20]);
+             std::cout << "M20 = "<<bitM_echo[20] << " Y13 = "<< device.y1[3]<< std::endl;
             if(bitM_echo[20] == ON) //sensor charging AGV
             {
-                bitM_pub[18] = ON;   // send to PLC
+                // bitM_pub[18] = ON;   // send to PLC
+                // ros::Duration(5).sleep(); 
                 ROS_INFO("fx5uc_controller.cpp-89- Shutdown the IPC");
                 system("sudo shutdown now");
             }
 
-            fx5uc->modbus_write_coils(Mbit, 20, bitM_pub); 
+            fx5uc->modbus_write_coils(Mbit, 100, bitM_pub); 
             fx5uc->modbus_write_register(0, device.D[1]); 
         } else ROS_INFO("fx5uc_controller.cpp-80-not listen"); 
-
-
-
-
-        system("sudo shutdown now");
-
 
         loop_rate.sleep();
         ros::spinOnce();
