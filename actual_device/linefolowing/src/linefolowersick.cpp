@@ -293,9 +293,9 @@ int main(int argc, char **argv)
 					if(present_speed != present_speed_setting)
 					{
 						if(present_speed_setting > present_speed) {
-							Gacceleration(present_speed, 0.01);
+							Gacceleration(present_speed, 0.02);
 						}else if(present_speed_setting < present_speed) {
-							Deceleration(present_speed, 0.01);
+							Deceleration(present_speed, 0.02);
 						}
 					} 
 					begin_time = clock();
